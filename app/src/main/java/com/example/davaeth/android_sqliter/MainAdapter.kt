@@ -1,32 +1,38 @@
 package com.example.davaeth.android_sqliter
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.phones_list.view.*
+import com.example.davaeth.android_sqliter.models.Users
+import kotlinx.android.synthetic.main.users_list.view.*
 
-class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+class MainAdapter(userList: List<Users>, internal var context: Context) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
-    class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    var userList: List<Users> = ArrayList()
+
+    init {
+        this.userList = userList
+    }
+
+    class MainViewHolder(view: View, userList: List<Users>) : RecyclerView.ViewHolder(view) {
         init {
             view.setOnClickListener {
-                view.phoneType.text = "Elo"
+                view.nickname.text = userList.get(2).nickname
             }
             view.setOnLongClickListener {
-                view.phoneMark.text = "elo2"
+                view.email.text = userList.get(2).email
                 return@setOnLongClickListener true
             }
         }
     }
 
     // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): MainAdapter.MainViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val cellForRow = layoutInflater.inflate(R.layout.phones_list, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainAdapter.MainViewHolder {
+        val cellForRow = LayoutInflater.from(parent.context).inflate(R.layout.users_list, parent, false)
 
-        return MainViewHolder(cellForRow)
+        return MainViewHolder(cellForRow, this.userList)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -34,5 +40,5 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     }
 
-    override fun getItemCount() = 2
+    override fun getItemCount() = this.userList.size
 }
