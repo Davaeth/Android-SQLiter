@@ -1,14 +1,16 @@
-package com.example.davaeth.android_sqliter
+package com.example.davaeth.android_sqliter.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.davaeth.android_sqliter.R
 import com.example.davaeth.android_sqliter.models.Users
 import kotlinx.android.synthetic.main.users_list.view.*
 
-class MainAdapter(userList: List<Users>, internal var context: Context) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+class MainAdapter(userList: List<Users>, internal var context: Context) :
+    RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     var userList: List<Users> = ArrayList()
 
@@ -19,17 +21,17 @@ class MainAdapter(userList: List<Users>, internal var context: Context) : Recycl
     class MainViewHolder(view: View, userList: List<Users>) : RecyclerView.ViewHolder(view) {
         init {
             view.setOnClickListener {
-                view.nickname.text = userList.get(2).nickname
+                view.nickname.text = userList[2].nickname
             }
             view.setOnLongClickListener {
-                view.email.text = userList.get(2).email
+                view.email.text = userList[2].email
                 return@setOnLongClickListener true
             }
         }
     }
 
     // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainAdapter.MainViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val cellForRow = LayoutInflater.from(parent.context).inflate(R.layout.users_list, parent, false)
 
         return MainViewHolder(cellForRow, this.userList)
@@ -37,7 +39,6 @@ class MainAdapter(userList: List<Users>, internal var context: Context) : Recycl
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-
     }
 
     override fun getItemCount() = this.userList.size

@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.davaeth.android_sqliter.models.Users
 
-class DatabaseHandler(context: Context) :
-    SQLiteOpenHelper(context, DatabaseHandler.DB_NAME, null, DatabaseHandler.DB_VERSION) {
+class UserHandler(context: Context) :
+    SQLiteOpenHelper(context, UserHandler.DB_NAME, null, UserHandler.DB_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_TABLE = "CREATE TABLE $TABLE_NAME (" +
@@ -25,30 +25,37 @@ class DatabaseHandler(context: Context) :
     fun addUser(user: Users): Boolean {
         val db = this.writableDatabase
         val values = ContentValues()
+
         values.put(NICKNAME, user.nickname)
         values.put(PASSWORD, user.password)
         values.put(EMAIL, user.email)
-        val _success = db.insert(TABLE_NAME, null, values)
+
+        val success = db.insert(TABLE_NAME, null, values)
+
         db.close()
-        return (Integer.parseInt("$_success") != -1)
+
+        return (Integer.parseInt("$success") != -1)
     }
 
-    fun getTask(_id: Int): Users {
-        val users = Users()
+    fun getUser(id: Int): Users {
+        val user = Users()
         val db = writableDatabase
-        val selectQuery = "SELECT  * FROM $TABLE_NAME WHERE $ID = $_id"
+        val selectQuery = "SELECT  * FROM $TABLE_NAME WHERE $ID = $id"
         val cursor = db.rawQuery(selectQuery, null)
+
         if (cursor != null) {
             cursor.moveToFirst()
             while (cursor.moveToNext()) {
-                users.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                users.nickname = cursor.getString(cursor.getColumnIndex(NICKNAME))
-                users.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
-                users.email = cursor.getString(cursor.getColumnIndex(EMAIL))
+                user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                user.nickname = cursor.getString(cursor.getColumnIndex(NICKNAME))
+                user.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
+                user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
             }
         }
+
         cursor.close()
-        return users
+
+        return user
     }
 
     val users: List<Users>
@@ -57,6 +64,7 @@ class DatabaseHandler(context: Context) :
             val db = writableDatabase
             val selectQuery = "SELECT  * FROM $TABLE_NAME"
             val cursor = db.rawQuery(selectQuery, null)
+
             if (cursor != null) {
                 cursor.moveToFirst()
                 while (cursor.moveToNext()) {
@@ -68,36 +76,44 @@ class DatabaseHandler(context: Context) :
                     userList.add(user)
                 }
             }
+
             cursor.close()
+
             return userList
         }
 
     fun updateUser(user: Users): Boolean {
         val db = this.writableDatabase
         val values = ContentValues()
+
         values.put(NICKNAME, user.nickname)
         values.put(PASSWORD, user.password)
         values.put(EMAIL, user.email)
-        val _success = db.update(TABLE_NAME, values, ID + "=?", arrayOf(user.id.toString())).toLong()
+
+        val success = db.update(TABLE_NAME, values, ID + "=?", arrayOf(user.id.toString())).toLong()
+
         db.close()
-        return Integer.parseInt("$_success") != -1
+
+        return Integer.parseInt("$success") != -1
     }
 
-    fun deleteUser(_id: Int): Boolean {
+    fun deleteUser(id: Int): Boolean {
         val db = this.writableDatabase
-        val _success = db.delete(TABLE_NAME, ID + "=?", arrayOf(_id.toString())).toLong()
+        val success = db.delete(TABLE_NAME, ID + "=?", arrayOf(id.toString())).toLong()
+
         db.close()
-        return Integer.parseInt("$_success") != -1
+
+        return Integer.parseInt("$success") != -1
     }
 
     companion object {
 
-        private val DB_VERSION = 1
-        private val DB_NAME = "Severian"
-        private val TABLE_NAME = "Users"
-        private val ID = "Id"
-        private val NICKNAME = "Nickname"
-        private val EMAIL = "Email"
-        private val PASSWORD = "Password"
+        private const val DB_VERSION = 1
+        private const val DB_NAME = "Severian"
+        private const val TABLE_NAME = "Users"
+        private const val ID = "Id"
+        private const val NICKNAME = "Nickname"
+        private const val EMAIL = "Email"
+        private const val PASSWORD = "Password"
     }
 }
