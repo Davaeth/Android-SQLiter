@@ -5,5 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="login">#47AF2D</color>
     <color name="register">#2178A0</color>
-    <color name="login_sign_text">#B42A43</color>
+    <color name="register_sign_text">#B42A43</color>
+    <color name="login_sign_text">#2AB46D</color>
 </resources>

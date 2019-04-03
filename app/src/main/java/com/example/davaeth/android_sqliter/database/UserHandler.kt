@@ -58,6 +58,32 @@ class UserHandler(context: Context) :
         return user
     }
 
+    fun getUser(username: String): Users? {
+        val user = Users()
+        val db = writableDatabase
+        val selectQuery = "SELECT  * FROM $TABLE_NAME WHERE $USERNAME = $username"
+        val cursor = db.rawQuery(selectQuery, null)
+
+        if (cursor.getColumnIndex(USERNAME) != null) {
+
+            if (cursor != null) {
+                cursor.moveToFirst()
+                while (cursor.moveToNext()) {
+                    user!!.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                    user!!.username = cursor.getString(cursor.getColumnIndex(USERNAME))
+                    user!!.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
+                    user!!.email = cursor.getString(cursor.getColumnIndex(EMAIL))
+                }
+            }
+
+            cursor.close()
+
+            return user
+        } else {
+            return null
+        }
+    }
+
     val users: List<Users>
         get() {
             val userList = ArrayList<Users>()

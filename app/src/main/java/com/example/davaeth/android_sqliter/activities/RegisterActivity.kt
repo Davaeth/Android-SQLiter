@@ -47,7 +47,7 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
 
     }
 
-    fun signIn(v: View?) {
+    fun signUp(v: View?) {
         if (checkIsBlank() && checkIsEmail()) {
 
             user = Users(
@@ -65,12 +65,15 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
             val intent = Intent(this, MainActivity::class.java).apply {}
 
             startActivity(intent)
+
+            Toast.makeText(this, "Registered successfully!", Toast.LENGTH_LONG).show()
         } else {
             Toast.makeText(this, "Check your data!", Toast.LENGTH_SHORT).show()
         }
 
         if(!checkIsEmail()) {
             register_emailText.setBackgroundColor(Color.RED)
+            Toast.makeText(this, "This is not an email!", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -25,10 +25,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun switchToLoginActivity(v: View?) {
-        val intent = Intent(this, RegisterActivity::class.java).apply {
+        val intent = Intent(this, LoginActivity::class.java).apply {
         }
 
-        //startActivity(intent)
+        startActivity(intent)
     }
 
     fun switchToRegisterActivity(v: View?) {
