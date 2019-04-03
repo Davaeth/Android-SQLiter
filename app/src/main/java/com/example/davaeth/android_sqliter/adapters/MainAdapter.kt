@@ -21,7 +21,7 @@ class MainAdapter(userList: List<Users>, internal var context: Context) :
     class MainViewHolder(view: View, userList: List<Users>) : RecyclerView.ViewHolder(view) {
         init {
             view.setOnClickListener {
-                view.nickname.text = userList[2].nickname
+                view.nickname.text = userList[2].username
             }
             view.setOnLongClickListener {
                 view.email.text = userList[2].email

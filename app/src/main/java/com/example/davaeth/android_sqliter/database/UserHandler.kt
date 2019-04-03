@@ -12,7 +12,7 @@ class UserHandler(context: Context) :
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_TABLE = "CREATE TABLE $TABLE_NAME (" +
                 ID + " INTEGER PRIMARY KEY," +
-                NICKNAME + " TEXT," + PASSWORD + " TEXT," + EMAIL + " VARCHAR(45));"
+                USERNAME + " TEXT," + PASSWORD + " TEXT," + EMAIL + " VARCHAR(45));"
         db.execSQL(CREATE_TABLE)
     }
 
@@ -26,7 +26,7 @@ class UserHandler(context: Context) :
         val db = this.writableDatabase
         val values = ContentValues()
 
-        values.put(NICKNAME, user.nickname)
+        values.put(USERNAME, user.username)
         values.put(PASSWORD, user.password)
         values.put(EMAIL, user.email)
 
@@ -47,7 +47,7 @@ class UserHandler(context: Context) :
             cursor.moveToFirst()
             while (cursor.moveToNext()) {
                 user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                user.nickname = cursor.getString(cursor.getColumnIndex(NICKNAME))
+                user.username = cursor.getString(cursor.getColumnIndex(USERNAME))
                 user.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
                 user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
             }
@@ -70,7 +70,7 @@ class UserHandler(context: Context) :
                 while (cursor.moveToNext()) {
                     val user = Users()
                     user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                    user.nickname = cursor.getString(cursor.getColumnIndex(NICKNAME))
+                    user.username = cursor.getString(cursor.getColumnIndex(USERNAME))
                     user.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
                     user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
                     userList.add(user)
@@ -86,7 +86,7 @@ class UserHandler(context: Context) :
         val db = this.writableDatabase
         val values = ContentValues()
 
-        values.put(NICKNAME, user.nickname)
+        values.put(USERNAME, user.username)
         values.put(PASSWORD, user.password)
         values.put(EMAIL, user.email)
 
@@ -112,7 +112,7 @@ class UserHandler(context: Context) :
         private const val DB_NAME = "Severian"
         private const val TABLE_NAME = "Users"
         private const val ID = "Id"
-        private const val NICKNAME = "Nickname"
+        private const val USERNAME = "Username"
         private const val EMAIL = "Email"
         private const val PASSWORD = "Password"
     }

@@ -1,8 +1,8 @@
 package com.example.davaeth.android_sqliter.models
 
-class Users(nickname: String = "", password: String = "", email: String = "") {
+class Users(username: String = "", password: String = "", email: String = "") {
     var id: Int = 0
-    var nickname: String = nickname
+    var username: String = username
     var password: String = password
     var email: String = email
 }

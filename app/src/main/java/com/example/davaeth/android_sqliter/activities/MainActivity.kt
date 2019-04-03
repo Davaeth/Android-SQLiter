@@ -1,7 +1,9 @@
 package com.example.davaeth.android_sqliter.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.example.davaeth.android_sqliter.R
 
 class MainActivity : AppCompatActivity() {
@@ -20,9 +22,20 @@ class MainActivity : AppCompatActivity() {
 //        recyclerView_main.adapter = MainAdapter(listUsers, this)
 //        recyclerView_main.setHasFixedSize(true)
 
-//        deleteUserBtn.setOnClickListener {
-//            db.deleteUser(0)
-//        }
+    }
+
+    fun switchToLoginActivity(v: View?) {
+        val intent = Intent(this, RegisterActivity::class.java).apply {
+        }
+
+        //startActivity(intent)
+    }
+
+    fun switchToRegisterActivity(v: View?) {
+        val intent = Intent(this, RegisterActivity::class.java).apply {
+        }
+
+        startActivity(intent)
     }
 
 //    fun initDB() {
