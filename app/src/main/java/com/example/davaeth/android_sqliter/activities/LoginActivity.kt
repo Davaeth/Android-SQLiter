@@ -49,6 +49,9 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "User not found!", Toast.LENGTH_SHORT)
             }
         }
+
+        TODO("bad user request")
+        TODO("send information about user to the next activity")
     }
 
     private fun checkIsBlank(): Boolean {

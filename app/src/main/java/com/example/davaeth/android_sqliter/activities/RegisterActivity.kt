@@ -4,9 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -16,7 +14,7 @@ import com.example.davaeth.android_sqliter.models.Users
 import kotlinx.android.synthetic.main.activity_register.*
 import java.sql.SQLDataException
 
-class RegisterActivity : AppCompatActivity(), TextWatcher {
+class RegisterActivity : AppCompatActivity() {
 
     lateinit var db: UserHandler
 
@@ -33,18 +31,6 @@ class RegisterActivity : AppCompatActivity(), TextWatcher {
         }
 
         register_usernameText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-
-    }
-
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-    }
-
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
     }
 
     fun signUp(v: View?) {
