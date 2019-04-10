@@ -9,12 +9,11 @@ import com.example.davaeth.android_sqliter.R
 import com.example.davaeth.android_sqliter.database.UserHandler
 import com.example.davaeth.android_sqliter.models.User
 import kotlinx.android.synthetic.main.activity_login.*
-import java.sql.SQLDataException
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var db: UserHandler
-    private var user: User ? = null
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +21,8 @@ class LoginActivity : AppCompatActivity() {
 
         initDB()
 
-        for(user in db.users) {
-            println("USERS NAMES: ${user.username} AND USER ID: ${user.id} AND THE PASSWORD: ${user.password}")
-        }
+        println("USERS NAMES: ${db.users[0].username} AND USER ID: ${db.users[0].id} AND THE PASSWORD: ${db.users[0].password}")
+
     }
 
     fun signing(v: View?) {
@@ -32,16 +30,18 @@ class LoginActivity : AppCompatActivity() {
 
             try {
                 this.user = db.getUser(login_usernameText.text.toString())
-            } catch (e: SQLDataException) {
+            } catch (e: NullPointerException) {
                 println("Error: $e")
             }
 
             if (this.user != null) {
 
                 if (user!!.password == login_passwordText.text.toString()) {
-                    val intent = Intent(this, MainActivity::class.java).apply {}
+                    val intent = Intent(this, DataListActivity::class.java).apply {
+                        putExtra("loggedUser", user!!.id)
+                    }
 
-                    //startActivity(intent)
+                    startActivity(intent)
 
                     Toast.makeText(this, "Logged successfully!", Toast.LENGTH_LONG).show()
                 } else {

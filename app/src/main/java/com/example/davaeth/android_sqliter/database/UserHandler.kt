@@ -67,10 +67,10 @@ class UserHandler(context: Context) :
         if (cursor != null) {
             cursor.moveToFirst()
             while (cursor.moveToNext()) {
-                user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                user.username = cursor.getString(cursor.getColumnIndex(USERNAME))
-                user.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
-                user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
+                user!!.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                user!!.username = cursor.getString(cursor.getColumnIndex(USERNAME))
+                user!!.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
+                user!!.email = cursor.getString(cursor.getColumnIndex(EMAIL))
             }
         }
 
