@@ -4,25 +4,25 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.davaeth.android_sqliter.models.Users
+import com.example.davaeth.android_sqliter.models.User
 
 class UserHandler(context: Context) :
-    SQLiteOpenHelper(context, UserHandler.DB_NAME, null, UserHandler.DB_VERSION) {
+    SQLiteOpenHelper(context, UserHandler.DB_NAME, null, UserHandler.dbVersion) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        val CREATE_TABLE = "CREATE TABLE $TABLE_NAME (" +
-                ID + " INTEGER PRIMARY KEY," +
-                USERNAME + " TEXT," + PASSWORD + " TEXT," + EMAIL + " VARCHAR(45));"
+        val CREATE_TABLE =
+            "CREATE TABLE $TABLE_NAME ($ID INTEGER PRIMARY KEY, $USERNAME TEXT, $PASSWORD TEXT, $EMAIL VARCHAR(45));"
         db.execSQL(CREATE_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        val DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME
+        val DROP_TABLE = "DROP TABLE IF EXISTS $TABLE_NAME"
+        dbVersion += 1
         db.execSQL(DROP_TABLE)
         onCreate(db)
     }
 
-    fun addUser(user: Users): Boolean {
+    fun addUser(user: User): Boolean {
         val db = this.writableDatabase
         val values = ContentValues()
 
@@ -37,10 +37,10 @@ class UserHandler(context: Context) :
         return (Integer.parseInt("$success") != -1)
     }
 
-    fun getUser(id: Int): Users {
-        val user = Users()
+    fun getUser(id: Int): User {
+        val user = User()
         val db = writableDatabase
-        val selectQuery = "SELECT  * FROM $TABLE_NAME WHERE $ID = $id"
+        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE $ID = $id"
         val cursor = db.rawQuery(selectQuery, null)
 
         if (cursor != null) {
@@ -58,35 +58,30 @@ class UserHandler(context: Context) :
         return user
     }
 
-    fun getUser(username: String): Users? {
-        val user = Users()
+    fun getUser(username: String): User? {
+        val user = User()
         val db = writableDatabase
-        val selectQuery = "SELECT  * FROM $TABLE_NAME WHERE $USERNAME = $username"
+        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE $USERNAME = $username"
         val cursor = db.rawQuery(selectQuery, null)
 
-        if (cursor.getColumnIndex(USERNAME) != null) {
-
-            if (cursor != null) {
-                cursor.moveToFirst()
-                while (cursor.moveToNext()) {
-                    user!!.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                    user!!.username = cursor.getString(cursor.getColumnIndex(USERNAME))
-                    user!!.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
-                    user!!.email = cursor.getString(cursor.getColumnIndex(EMAIL))
-                }
+        if (cursor != null) {
+            cursor.moveToFirst()
+            while (cursor.moveToNext()) {
+                user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                user.username = cursor.getString(cursor.getColumnIndex(USERNAME))
+                user.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
+                user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
             }
-
-            cursor.close()
-
-            return user
-        } else {
-            return null
         }
+
+        cursor.close()
+
+        return user
     }
 
-    val users: List<Users>
+    val users: List<User>
         get() {
-            val userList = ArrayList<Users>()
+            val userList = ArrayList<User>()
             val db = writableDatabase
             val selectQuery = "SELECT  * FROM $TABLE_NAME"
             val cursor = db.rawQuery(selectQuery, null)
@@ -94,11 +89,13 @@ class UserHandler(context: Context) :
             if (cursor != null) {
                 cursor.moveToFirst()
                 while (cursor.moveToNext()) {
-                    val user = Users()
+                    val user = User()
+
                     user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
                     user.username = cursor.getString(cursor.getColumnIndex(USERNAME))
                     user.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
                     user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
+
                     userList.add(user)
                 }
             }
@@ -108,7 +105,7 @@ class UserHandler(context: Context) :
             return userList
         }
 
-    fun updateUser(user: Users): Boolean {
+    fun updateUser(user: User): Boolean {
         val db = this.writableDatabase
         val values = ContentValues()
 
@@ -133,13 +130,12 @@ class UserHandler(context: Context) :
     }
 
     companion object {
-
-        private const val DB_VERSION = 1
+        private var dbVersion = 1
         private const val DB_NAME = "Severian"
         private const val TABLE_NAME = "Users"
-        private const val ID = "Id"
-        private const val USERNAME = "Username"
-        private const val EMAIL = "Email"
-        private const val PASSWORD = "Password"
+        private const val ID = "id"
+        private const val USERNAME = "username"
+        private const val EMAIL = "email"
+        private const val PASSWORD = "password"
     }
 }

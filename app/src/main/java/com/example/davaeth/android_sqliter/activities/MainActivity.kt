@@ -8,19 +8,9 @@ import com.example.davaeth.android_sqliter.R
 
 class MainActivity : AppCompatActivity() {
 
-//    var db: UserHandler = UserHandler(this)
-//    var listUsers: List<Users> = ArrayList()
-//    var user: Users = Users("Patryk", "Vege", "elo@gmail.com")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-//        initDB()
-//
-//        recyclerView_main.layoutManager = LinearLayoutManager(this)
-//        recyclerView_main.adapter = MainAdapter(listUsers, this)
-//        recyclerView_main.setHasFixedSize(true)
 
     }
 
@@ -38,9 +28,5 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-//    fun initDB() {
-//        db = UserHandler(this)
-//        db.addUser(this.user)
-//        listUsers = db.users
-//    }
+
 }

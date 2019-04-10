@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.Toast
 import com.example.davaeth.android_sqliter.R
 import com.example.davaeth.android_sqliter.database.UserHandler
-import com.example.davaeth.android_sqliter.models.Users
+import com.example.davaeth.android_sqliter.models.User
 import kotlinx.android.synthetic.main.activity_register.*
 import java.sql.SQLDataException
 
@@ -18,7 +18,7 @@ class RegisterActivity : AppCompatActivity() {
 
     lateinit var db: UserHandler
 
-    lateinit var user: Users
+    lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class RegisterActivity : AppCompatActivity() {
     fun signUp(v: View?) {
         if (checkIsBlank() && checkIsEmail()) {
 
-            user = Users(
+            user = User(
                 register_usernameText.text.toString(),
                 register_passwordText.text.toString(),
                 register_emailText.text.toString()
