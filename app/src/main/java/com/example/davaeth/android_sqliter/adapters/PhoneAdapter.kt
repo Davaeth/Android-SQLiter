@@ -7,21 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.davaeth.android_sqliter.R
 import com.example.davaeth.android_sqliter.models.Phone
-import kotlinx.android.synthetic.main.users_list.view.*
 
 class PhoneAdapter(private var phone: Phone, internal var context: Context) :
     RecyclerView.Adapter<PhoneAdapter.PhoneViewAdapter>() {
 
-    class PhoneViewAdapter(view: View, phone: Phone) : RecyclerView.ViewHolder(view) {
-        init {
-            view.setOnClickListener {
-                view.user_Nickname.text = phone.brand
-            }
-            view.setOnLongClickListener {
-                view.user_Email.text = phone.model
-                return@setOnLongClickListener true
-            }
+    class PhoneViewAdapter(view: View, phone: Phone) : RecyclerView.ViewHolder(view),
+        View.OnLongClickListener, View.OnClickListener {
+
+        override fun onLongClick(v: View?): Boolean {
+            TODO("Change activity to `PhoneEditActivity`")
+            TODO("Or delete selected phone")
         }
+
+        override fun onClick(v: View?) {
+            TODO("Select multiple phones then change activity to `PhoneEditActivity`")
+            TODO("Or delete selected phones")
+        }
+
     }
 
     // Create new views (invoked by the layout manager)

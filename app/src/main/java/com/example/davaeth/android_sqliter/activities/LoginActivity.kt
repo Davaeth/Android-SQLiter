@@ -21,31 +21,34 @@ class LoginActivity : AppCompatActivity() {
 
         initDB()
 
-        println("USERS NAMES: ${db.users[0].username} AND USER ID: ${db.users[0].id} AND THE PASSWORD: ${db.users[0].password}")
+        for (user in db.users)
+            println("USERS NAMES: ${user.username} AND USER ID: ${user.id} AND THE PASSWORD: ${user.password}")
 
     }
 
     fun signing(v: View?) {
-        if (checkIsBlank()) {
+        if (checkIsNotBlank()) {
 
             try {
                 this.user = db.getUser(login_usernameText.text.toString())
+                println("CORRECT PASSWORD ${this.user!!.password}")
             } catch (e: NullPointerException) {
                 println("Error: $e")
             }
 
             if (this.user != null) {
 
-                if (user!!.password == login_passwordText.text.toString()) {
+                if (this.user!!.password == login_passwordText.text.toString()) {
                     val intent = Intent(this, DataListActivity::class.java).apply {
                         putExtra("loggedUser", user!!.id)
                     }
 
-                    startActivity(intent)
+                    //startActivity(intent)
 
                     Toast.makeText(this, "Logged successfully!", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this, "Invalid password!", Toast.LENGTH_SHORT).show()
+
                 }
             } else {
                 Toast.makeText(this, "User not found!", Toast.LENGTH_LONG).show()
@@ -53,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkIsBlank(): Boolean {
+    private fun checkIsNotBlank(): Boolean {
         return login_usernameText.text.isNotBlank() && login_passwordText.text.isNotBlank()
     }
 
