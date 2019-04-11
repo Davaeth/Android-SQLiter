@@ -3,7 +3,9 @@ package com.example.davaeth.android_sqliter.database
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.example.davaeth.android_sqliter.models.Phone
 
 class PhoneHandler(context: Context) :
@@ -11,7 +13,7 @@ class PhoneHandler(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_TABLE =
-            "CREATE TABLE $TABLE_NAME ($ID INTEGER PRIMARY KEY, $BRAND VARCHAR(45), $MODEL VARCHAR(45), $SYSTEM VARCHAR(45), $SYSTEM_VERSION FLOAT, $WEBSITE, TEXT);"
+            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, $BRAND VARCHAR(45), $MODEL VARCHAR(45), $SYSTEM VARCHAR(45), $SYSTEM_VERSION FLOAT, $WEBSITE TEXT);"
         db.execSQL(CREATE_TABLE)
     }
 
@@ -39,48 +41,72 @@ class PhoneHandler(context: Context) :
         return (Integer.parseInt("$success") != -1)
     }
 
-    fun getPhone(id: Int): Phone {
+    fun getPhone(id: Int): Phone? {
         val phone = Phone()
-        val db = writableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE $ID = $id"
-        val cursor = db.rawQuery(selectQuery, null)
+        val db = this.readableDatabase
 
-        if (cursor != null) {
-            cursor.moveToFirst()
-            while (cursor.moveToNext()) {
-                phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
-                phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
-                phone.system = cursor.getString(cursor.getColumnIndex(SYSTEM))
-                phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
-                phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+        try {
+
+            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE id = '$id'"
+
+            val cursor = db.rawQuery(selectQuery, null)
+
+            if (cursor.moveToFirst()) {
+                do {
+                    phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                    phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
+                    phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
+                    phone.system = cursor.getString(cursor.getColumnIndex(SYSTEM))
+                    phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
+                    phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+                } while (cursor.moveToNext())
+            } else {
+                cursor.close()
+                db.close()
+                return null
             }
-        }
 
-        cursor.close()
+            cursor.close()
+        } catch (e: SQLiteException) {
+            Log.w("Exception: ", e)
+        } finally {
+            db.close()
+        }
 
         return phone
     }
 
     fun getPhone(brand: String): Phone? {
         val phone = Phone()
-        val db = writableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE $BRAND = $brand"
-        val cursor = db.rawQuery(selectQuery, null)
+        val db = this.readableDatabase
 
-        if (cursor != null) {
-            cursor.moveToFirst()
-            while (cursor.moveToNext()) {
-                phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
-                phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
-                phone.system = cursor.getString(cursor.getColumnIndex(SYSTEM))
-                phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
-                phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+        try {
+
+            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE brand = '$brand'"
+
+            val cursor = db.rawQuery(selectQuery, null)
+
+            if (cursor.moveToFirst()) {
+                do {
+                    phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                    phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
+                    phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
+                    phone.system = cursor.getString(cursor.getColumnIndex(SYSTEM))
+                    phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
+                    phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+                } while (cursor.moveToNext())
+            } else {
+                cursor.close()
+                db.close()
+                return null
             }
-        }
 
-        cursor.close()
+            cursor.close()
+        } catch (e: SQLiteException) {
+            Log.w("Exception: ", e)
+        } finally {
+            db.close()
+        }
 
         return phone
     }
@@ -88,7 +114,7 @@ class PhoneHandler(context: Context) :
     val phones: List<Phone>
         get() {
             val phonesList = ArrayList<Phone>()
-            val db = writableDatabase
+            val db = this.readableDatabase
             val selectQuery = "SELECT  * FROM $TABLE_NAME"
             val cursor = db.rawQuery(selectQuery, null)
 

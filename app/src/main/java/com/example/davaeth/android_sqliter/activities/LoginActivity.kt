@@ -21,8 +21,9 @@ class LoginActivity : AppCompatActivity() {
 
         initDB()
 
-        for (user in db.users)
+        for (user in db.users) {
             println("USERS NAMES: ${user.username} AND USER ID: ${user.id} AND THE PASSWORD: ${user.password}")
+        }
 
     }
 
@@ -43,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
                         putExtra("loggedUser", user!!.id)
                     }
 
-                    //startActivity(intent)
+                    startActivity(intent)
 
                     Toast.makeText(this, "Logged successfully!", Toast.LENGTH_LONG).show()
                 } else {

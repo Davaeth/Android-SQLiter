@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.activity_data_list.*
 
 class DataListActivity : AppCompatActivity() {
 
-    lateinit var dbPhones: PhoneHandler
-    lateinit var dbUsers: UserHandler
+    private lateinit var dbPhones: PhoneHandler
+    private lateinit var dbUsers: UserHandler
 
     private lateinit var phonesList: Phone
 
@@ -32,5 +32,7 @@ class DataListActivity : AppCompatActivity() {
     private fun initDB() {
         dbPhones = PhoneHandler(this)
         dbUsers = UserHandler(this)
+
+        phonesList = Phone("XIAOMI", "Mi MAX 3")
     }
 }

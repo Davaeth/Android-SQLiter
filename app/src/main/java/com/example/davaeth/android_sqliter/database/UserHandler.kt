@@ -13,7 +13,7 @@ class UserHandler(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_TABLE =
-            "CREATE TABLE $TABLE_NAME ($ID INTEGER PRIMARY KEY, $USERNAME TEXT, $PASSWORD TEXT, $EMAIL VARCHAR(45));"
+            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, $USERNAME TEXT, $PASSWORD TEXT, $EMAIL VARCHAR(45));"
         db.execSQL(CREATE_TABLE)
     }
 
