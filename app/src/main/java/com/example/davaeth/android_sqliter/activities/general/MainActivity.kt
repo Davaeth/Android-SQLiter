@@ -1,10 +1,12 @@
-package com.example.davaeth.android_sqliter.activities
+package com.example.davaeth.android_sqliter.activities.general
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.example.davaeth.android_sqliter.R
+import com.example.davaeth.android_sqliter.activities.signing.LoginActivity
+import com.example.davaeth.android_sqliter.activities.signing.RegisterActivity
 
 class MainActivity : AppCompatActivity() {
 

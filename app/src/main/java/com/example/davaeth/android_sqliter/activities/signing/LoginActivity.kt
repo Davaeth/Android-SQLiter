@@ -1,4 +1,4 @@
-package com.example.davaeth.android_sqliter.activities
+package com.example.davaeth.android_sqliter.activities.signing
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.example.davaeth.android_sqliter.R
+import com.example.davaeth.android_sqliter.activities.phones.DataListActivity
 import com.example.davaeth.android_sqliter.database.UserHandler
 import com.example.davaeth.android_sqliter.models.User
 import kotlinx.android.synthetic.main.activity_login.*

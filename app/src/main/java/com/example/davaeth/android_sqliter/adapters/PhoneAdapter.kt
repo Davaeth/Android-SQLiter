@@ -1,32 +1,37 @@
 package com.example.davaeth.android_sqliter.adapters
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.davaeth.android_sqliter.R
+import com.example.davaeth.android_sqliter.activities.phones.PhoneActivity
 import com.example.davaeth.android_sqliter.models.Phone
 import kotlinx.android.synthetic.main.user_phones_list.view.*
 
 class PhoneAdapter(private var phone: Phone, internal var context: Context) :
     RecyclerView.Adapter<PhoneAdapter.PhoneViewAdapter>() {
 
-    class PhoneViewAdapter(view: View, phone: Phone) : RecyclerView.ViewHolder(view) {
+    class PhoneViewAdapter(view: View, phone: Phone, context: Context) : RecyclerView.ViewHolder(view) {
 
         init {
             view.setOnClickListener {
-//                TODO("Select multiple phones then change activity to `PhoneEditActivity`")
-//                TODO("Or delete selected phones")
+                val intent: Intent = Intent(context, PhoneActivity::class.java).apply {
+                    putExtra("isNewPhone", false)
+                    putExtra("phoneID", phone.id)
+                }
 
-                println("KLIKAM")
+                context.startActivity(intent)
+
+                view.setBackgroundColor(0)
             }
 
             view.setOnLongClickListener {
-//                TODO("Change activity to `PhoneEditActivity`")
-//                TODO("Or delete selected phone")
 
-                println("TRZYYYYYYYYYYYYYYYMAM")
+                view.setBackgroundColor(Color.LTGRAY)
 
                 return@setOnLongClickListener true
             }
@@ -41,12 +46,12 @@ class PhoneAdapter(private var phone: Phone, internal var context: Context) :
         view.phoneModel.text = this.phone.model
         view.phoneBrand.text = this.phone.brand
 
-        return PhoneViewAdapter(view, this.phone)
+        return PhoneViewAdapter(view, this.phone, this.context)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: PhoneViewAdapter, position: Int) {
     }
 
-    override fun getItemCount() = 1
+    override fun getItemCount() = 10
 }

@@ -13,7 +13,7 @@ class PhoneHandler(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_TABLE =
-            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, $BRAND VARCHAR(45), $MODEL VARCHAR(45), $SYSTEM VARCHAR(45), $SYSTEM_VERSION FLOAT, $WEBSITE TEXT);"
+            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, REFERENCE VARCHAR(32) NOT NULL, $BRAND VARCHAR(45), $MODEL VARCHAR(45), $SYSTEM_VERSION FLOAT, $WEBSITE TEXT);"
         db.execSQL(CREATE_TABLE)
     }
 
@@ -30,7 +30,6 @@ class PhoneHandler(context: Context) :
 
         values.put(BRAND, phone.brand)
         values.put(MODEL, phone.model)
-        values.put(SYSTEM, phone.system)
         values.put(SYSTEM_VERSION, phone.systemVersion)
         values.put(WEBSITE, phone.website)
 
@@ -56,7 +55,6 @@ class PhoneHandler(context: Context) :
                     phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
                     phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
                     phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
-                    phone.system = cursor.getString(cursor.getColumnIndex(SYSTEM))
                     phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
                     phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
                 } while (cursor.moveToNext())
@@ -75,41 +73,40 @@ class PhoneHandler(context: Context) :
 
         return phone
     }
-
-    fun getPhone(brand: String): Phone? {
-        val phone = Phone()
-        val db = this.readableDatabase
-
-        try {
-
-            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE brand = '$brand'"
-
-            val cursor = db.rawQuery(selectQuery, null)
-
-            if (cursor.moveToFirst()) {
-                do {
-                    phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-                    phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
-                    phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
-                    phone.system = cursor.getString(cursor.getColumnIndex(SYSTEM))
-                    phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
-                    phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
-                } while (cursor.moveToNext())
-            } else {
-                cursor.close()
-                db.close()
-                return null
-            }
-
-            cursor.close()
-        } catch (e: SQLiteException) {
-            Log.w("Exception: ", e)
-        } finally {
-            db.close()
-        }
-
-        return phone
-    }
+//
+//    fun getPhone(brand: String): Phone? {
+//        val phone = Phone()
+//        val db = this.readableDatabase
+//
+//        try {
+//
+//            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE brand = '$brand'"
+//
+//            val cursor = db.rawQuery(selectQuery, null)
+//
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+//                    phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
+//                    phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
+//                    phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
+//                    phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+//                } while (cursor.moveToNext())
+//            } else {
+//                cursor.close()
+//                db.close()
+//                return null
+//            }
+//
+//            cursor.close()
+//        } catch (e: SQLiteException) {
+//            Log.w("Exception: ", e)
+//        } finally {
+//            db.close()
+//        }
+//
+//        return phone
+//    }
 
     val phones: List<Phone>
         get() {
@@ -126,7 +123,6 @@ class PhoneHandler(context: Context) :
                     phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
                     phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
                     phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
-                    phone.system = cursor.getString(cursor.getColumnIndex(SYSTEM))
                     phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
                     phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
 
@@ -145,7 +141,6 @@ class PhoneHandler(context: Context) :
 
         values.put(BRAND, phone.brand)
         values.put(MODEL, phone.model)
-        values.put(SYSTEM, phone.system)
         values.put(SYSTEM_VERSION, phone.systemVersion)
         values.put(WEBSITE, phone.website)
 
@@ -172,7 +167,6 @@ class PhoneHandler(context: Context) :
         private const val ID = "id"
         private const val BRAND = "brand"
         private const val MODEL = "model"
-        private const val SYSTEM = "system"
         private const val SYSTEM_VERSION = "system_version"
         private const val WEBSITE = "website"
     }

@@ -1,4 +1,4 @@
-package com.example.davaeth.android_sqliter.activities
+package com.example.davaeth.android_sqliter.activities.signing
 
 import android.content.Intent
 import android.graphics.Color
@@ -9,6 +9,7 @@ import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import com.example.davaeth.android_sqliter.R
+import com.example.davaeth.android_sqliter.activities.general.MainActivity
 import com.example.davaeth.android_sqliter.database.UserHandler
 import com.example.davaeth.android_sqliter.models.User
 import kotlinx.android.synthetic.main.activity_register.*

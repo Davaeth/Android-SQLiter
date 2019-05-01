@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.davaeth.android_sqliter">
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.READ_PROFILE"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
             android:allowBackup="true"
@@ -13,30 +9,33 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
+        <activity android:name=".activities.phones.PhoneActivity">
+        </activity>
         <activity
-                android:name=".activities.DataListActivity"
+                android:name=".activities.phones.DataListActivity"
                 android:exported="true"
                 android:screenOrientation="portrait">
         </activity>
         <activity
-                android:name=".activities.RegisterActivity"
+                android:name=".activities.signing.RegisterActivity"
                 android:exported="true"
                 android:screenOrientation="portrait">
         </activity>
         <activity
-                android:name=".activities.LoginActivity"
+                android:name=".activities.signing.LoginActivity"
                 android:exported="true"
                 android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".activities.MainActivity">
+        <activity
+                android:name=".activities.general.MainActivity"
+                android:exported="true"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
