@@ -31,8 +31,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun signUp(v: View?) {
-        if (checkIsBlank() && checkIsEmail()) {
 
+        // If template was completed properly add user to the database
+        if (checkIsBlank() && checkIsEmail()) {
             user = User(
                 register_usernameText.text.toString(),
                 register_passwordText.text.toString(),
@@ -64,10 +65,16 @@ class RegisterActivity : AppCompatActivity() {
         db = UserHandler(this)
     }
 
+    /**
+     * Method that check if template form inputs are blank
+     */
     private fun checkIsBlank(): Boolean {
         return register_usernameText.text.isNotBlank() && register_passwordText.text.isNotBlank() && register_emailText.text.isNotBlank()
     }
 
+    /**
+     * Method that checks if email input contains exactly email
+     */
     private fun checkIsEmail(): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(register_emailText.text).matches()
     }

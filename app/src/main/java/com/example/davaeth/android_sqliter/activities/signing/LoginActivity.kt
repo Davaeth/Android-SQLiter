@@ -38,8 +38,8 @@ class LoginActivity : AppCompatActivity() {
                 println("Error: $e")
             }
 
+            // Check if user with sent nickname was found
             if (this.user != null) {
-
                 if (this.user!!.password == login_passwordText.text.toString()) {
                     val intent = Intent(this, DataListActivity::class.java).apply {
                         putExtra("loggedUser", user!!.id)

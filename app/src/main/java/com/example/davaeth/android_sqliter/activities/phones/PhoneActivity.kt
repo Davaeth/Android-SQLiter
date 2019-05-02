@@ -54,6 +54,9 @@ class PhoneActivity : AppCompatActivity() {
         backToPhonesList()
     }
 
+    /**
+     * Method that saves OR updates the particular phone in database
+     */
     fun savePhoneTemplate(view: View) {
         if(intent.getBooleanExtra("isNewPhone", true)) {
             savePhone()
@@ -100,6 +103,9 @@ class PhoneActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Method that receives data posted by user
+     */
     private fun getTemplateData(): Phone {
         val phone = Phone()
 

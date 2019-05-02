@@ -26,6 +26,8 @@ class DataListActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_data_list)
 
+        // Print data about selected phone in the template form
+        // if it's and edit mode, not add
         if (phonesList != null) {
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 recyclerView.adapter = PhoneAdapter(phonesList!!, this, intent.getIntExtra("loggedUser", 0))
@@ -35,12 +37,18 @@ class DataListActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.dataList_phoneBar))
     }
 
+    /**
+     * Method that adds actions to the toolbar
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_phone, menu)
 
         return true
     }
 
+    /**
+     * Toolbar actions functionalities
+     */
     override fun onOptionsItemSelected(item: MenuItem?) = when (item!!.itemId) {
 
         R.id.action_add_phone -> {
