@@ -62,7 +62,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun initDB() {
         db = UserHandler(this)
-        db.writableDatabase
     }
 
     private fun checkIsBlank(): Boolean {
