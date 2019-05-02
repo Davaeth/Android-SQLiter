@@ -1,6 +1,7 @@
 package com.example.davaeth.android_sqliter.activities.phones
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -14,14 +15,10 @@ import kotlinx.android.synthetic.main.activity_phone.*
 
 class PhoneActivity : AppCompatActivity() {
 
-    private var extras: Intent = Intent()
-
     private lateinit var userPhonesDB: UserPhonesHandler
     private lateinit var phonesDB: PhoneHandler
 
     private var phone: Phone? = null
-
-    private var isNewPhone: Boolean = extras.getBooleanExtra("isNewPhone", true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +26,7 @@ class PhoneActivity : AppCompatActivity() {
 
         initDB()
 
-        if (!isNewPhone && phone != null) {
-            println("PhoneActivity :: edit phone")
-
+        if (!intent.getBooleanExtra("isNewPhone", true) && phone != null) {
             phoneTemplate_brand.setText(phone!!.brand)
             phoneTemplate_model.setText(phone!!.model)
             phoneTemplate_systemVersion.setText(phone!!.systemVersion.toString())
@@ -51,6 +46,7 @@ class PhoneActivity : AppCompatActivity() {
             startActivity(searchInWeb)
         } else {
             Toast.makeText(this, "Wrong address!", Toast.LENGTH_LONG).show()
+            view.setBackgroundColor(Color.RED)
         }
     }
 
@@ -59,7 +55,7 @@ class PhoneActivity : AppCompatActivity() {
     }
 
     fun savePhoneTemplate(view: View) {
-        if(isNewPhone) {
+        if(intent.getBooleanExtra("isNewPhone", true)) {
             savePhone()
 
             Toast.makeText(this, "Phone added successfully!", Toast.LENGTH_LONG).show()
@@ -83,18 +79,21 @@ class PhoneActivity : AppCompatActivity() {
     private fun savePhone() {
         val phone: Phone = getTemplateData()
 
+        userPhonesDB.addUserPhone(intent.getIntExtra("loggedUser", 0), phone.id)
         phonesDB.addPhone(phone)
-        userPhonesDB.addUserPhone(1, phone.id)
     }
 
     private fun initDB() {
         userPhonesDB = UserPhonesHandler(this)
         phonesDB = PhoneHandler(this)
 
-        if (!isNewPhone) {
-            if (extras.hasExtra("phoneID")) {
-                println("PhoneActivity :: has phone id")
-                phone = phonesDB.getPhone(extras.getIntExtra("phoneID", 0))
+        for (phone in phonesDB.phones) {
+            println(phone)
+        }
+
+        if (!intent.getBooleanExtra("isNewPhone", true)) {
+            if (intent.hasExtra("phoneID")) {
+                phone = phonesDB.getPhone(intent.getIntExtra("phoneID", 0))
             } else {
                 Toast.makeText(this, "Wrong phone id!", Toast.LENGTH_SHORT).show()
             }
@@ -113,7 +112,9 @@ class PhoneActivity : AppCompatActivity() {
     }
 
     private fun backToPhonesList() {
-        val intent: Intent = Intent(this, DataListActivity::class.java).apply {  }
+        val intent: Intent = Intent(this, DataListActivity::class.java).apply {
+            putExtra("loggedUser", intent.getIntExtra("loggedUser", 0))
+        }
 
         startActivity(intent)
     }

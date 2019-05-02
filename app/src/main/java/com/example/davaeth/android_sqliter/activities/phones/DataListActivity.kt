@@ -7,28 +7,30 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.example.davaeth.android_sqliter.R
+import com.example.davaeth.android_sqliter.activities.general.MainActivity
 import com.example.davaeth.android_sqliter.adapters.PhoneAdapter
-import com.example.davaeth.android_sqliter.database.PhoneHandler
-import com.example.davaeth.android_sqliter.database.UserHandler
+import com.example.davaeth.android_sqliter.database.UserPhonesHandler
 import com.example.davaeth.android_sqliter.models.Phone
 import kotlinx.android.synthetic.main.activity_data_list.*
 
 class DataListActivity : AppCompatActivity() {
 
-    private lateinit var dbPhones: PhoneHandler
-    private lateinit var dbUsers: UserHandler
+    private lateinit var dbUserPhones: UserPhonesHandler
 
-    private lateinit var phonesList: Phone
+    private var phonesList: List<Phone>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_data_list)
 
         initDB()
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = PhoneAdapter(phonesList, this)
-        recyclerView.setHasFixedSize(true)
+        setContentView(R.layout.activity_data_list)
+
+        if (phonesList != null) {
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = PhoneAdapter(phonesList!!, this, intent.getIntExtra("loggedUser", 0))
+                recyclerView.setHasFixedSize(true)
+        }
 
         setSupportActionBar(findViewById(R.id.dataList_phoneBar))
     }
@@ -44,6 +46,7 @@ class DataListActivity : AppCompatActivity() {
         R.id.action_add_phone -> {
             val intent: Intent = Intent(this, PhoneActivity::class.java).apply {
                 putExtra("isNewPhone", true)
+                putExtra("loggedUser", intent.getIntExtra("loggedUser", 0))
             }
 
             startActivity(intent)
@@ -55,6 +58,18 @@ class DataListActivity : AppCompatActivity() {
             true
         }
 
+        R.id.action_logout -> {
+            val intent: Intent = Intent(this, MainActivity::class.java).apply {
+                removeExtra("loggedUser")
+                removeExtra("phoneID")
+                removeExtra("isNewPhone")
+            }
+
+            startActivity(intent)
+
+            true
+        }
+
         else -> {
             super.onOptionsItemSelected(item)
         }
@@ -62,9 +77,13 @@ class DataListActivity : AppCompatActivity() {
 
 
     private fun initDB() {
-        dbPhones = PhoneHandler(this)
-        dbUsers = UserHandler(this)
+        val dbUserPhones = UserPhonesHandler(this)
 
-        phonesList = Phone("XIAOMI", "Mi MAX 3")
+        if (intent.hasExtra("loggedUser")) {
+            phonesList = dbUserPhones.getPhones(intent.getIntExtra("loggedUser", 0))
+
+        } else {
+            println("DataList :: user not logged")
+        }
     }
 }

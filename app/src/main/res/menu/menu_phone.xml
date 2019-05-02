@@ -14,6 +14,13 @@
             android:id="@+id/action_add_phone"
             android:orderInCategory="300"
             android:title="@string/add"
-            app:showAsAction="ifRoom"/>
+            app:showAsAction="collapseActionView"/>
+
+    <item
+            android:id="@+id/action_logout"
+            android:orderInCategory="100"
+            android:title="@string/logout"
+            app:showAsAction="collapseActionView"
+    />
 
 </menu>

@@ -10,7 +10,7 @@ import com.example.davaeth.android_sqliter.models.Phone
 import com.example.davaeth.android_sqliter.models.User
 
 class UserPhonesHandler(context: Context) :
-    SQLiteOpenHelper(context, UserPhonesHandler.DB_NAME, null, UserPhonesHandler.dbVersion) {
+    SQLiteOpenHelper(context, DB_NAME, null, dbVersion) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_TABLE =
@@ -39,7 +39,7 @@ class UserPhonesHandler(context: Context) :
         return (Integer.parseInt("$success") != -1)
     }
 
-    fun getUser(phone: Int): List<User>? {
+    fun getUsers(phone: Int): List<User>? {
         val usersList = ArrayList<User>()
         val db = this.readableDatabase
 
@@ -76,13 +76,13 @@ class UserPhonesHandler(context: Context) :
         return usersList
     }
 
-    fun getPhone(user: Int): List<Phone>? {
+    fun getPhones(user: Int): List<Phone>? {
         val phonesList = ArrayList<Phone>()
         val db = this.readableDatabase
 
         try {
 
-            val selectQuery = "SELECT * FROM $PHONES WHERE $TABLE_NAME.id_phones = '$user' AND $USERS.id = $TABLE_NAME.id_phones"
+            val selectQuery = "SELECT * FROM $PHONES, $TABLE_NAME WHERE id_users = '$user'"
 
             val cursor = db.rawQuery(selectQuery, null)
 
@@ -137,7 +137,7 @@ class UserPhonesHandler(context: Context) :
     }
 
     companion object {
-        private var dbVersion = 1
+        private var dbVersion = 7
         private const val DB_NAME = "Severian"
         private const val TABLE_NAME = "UserPhones"
         private const val ID = "id"

@@ -9,11 +9,11 @@ import android.util.Log
 import com.example.davaeth.android_sqliter.models.Phone
 
 class PhoneHandler(context: Context) :
-    SQLiteOpenHelper(context, PhoneHandler.DB_NAME, null, PhoneHandler.dbVersion) {
+    SQLiteOpenHelper(context, DB_NAME, null, dbVersion) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_TABLE =
-            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, REFERENCE VARCHAR(32) NOT NULL, $BRAND VARCHAR(45), $MODEL VARCHAR(45), $SYSTEM_VERSION FLOAT, $WEBSITE TEXT);"
+            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, REFERENCE TEXT, $BRAND TEXT, $MODEL TEXT, $SYSTEM_VERSION FLOAT, $WEBSITE TEXT);"
         db.execSQL(CREATE_TABLE)
     }
 
@@ -144,7 +144,7 @@ class PhoneHandler(context: Context) :
         values.put(SYSTEM_VERSION, phone.systemVersion)
         values.put(WEBSITE, phone.website)
 
-        val success = db.update(TABLE_NAME, values, ID + "=?", arrayOf(phone.id.toString())).toLong()
+        val success = db.update(TABLE_NAME, values, "$ID=?", arrayOf(phone.id.toString())).toLong()
 
         db.close()
 
@@ -153,7 +153,7 @@ class PhoneHandler(context: Context) :
 
     fun deletePhone(id: Int): Boolean {
         val db = this.writableDatabase
-        val success = db.delete(TABLE_NAME, ID + "=?", arrayOf(id.toString())).toLong()
+        val success = db.delete(TABLE_NAME, "$ID=?", arrayOf(id.toString())).toLong()
 
         db.close()
 
@@ -161,7 +161,7 @@ class PhoneHandler(context: Context) :
     }
 
     companion object {
-        private var dbVersion = 1
+        private var dbVersion = 7
         private const val DB_NAME = "Severian"
         private const val TABLE_NAME = "Phones"
         private const val ID = "id"

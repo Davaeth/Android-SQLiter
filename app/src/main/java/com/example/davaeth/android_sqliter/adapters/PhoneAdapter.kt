@@ -1,5 +1,6 @@
 package com.example.davaeth.android_sqliter.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -12,16 +13,20 @@ import com.example.davaeth.android_sqliter.activities.phones.PhoneActivity
 import com.example.davaeth.android_sqliter.models.Phone
 import kotlinx.android.synthetic.main.user_phones_list.view.*
 
-class PhoneAdapter(private var phone: Phone, internal var context: Context) :
+class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Context, private var userID: Int) :
     RecyclerView.Adapter<PhoneAdapter.PhoneViewAdapter>() {
 
-    class PhoneViewAdapter(view: View, phone: Phone, context: Context) : RecyclerView.ViewHolder(view) {
+    private var position: Int = 1
+
+    class PhoneViewAdapter(view: View, phone: List<Phone>, context: Context, userID: Int, position: Int) : RecyclerView.ViewHolder(view) {
 
         init {
             view.setOnClickListener {
+                println(position)
                 val intent: Intent = Intent(context, PhoneActivity::class.java).apply {
                     putExtra("isNewPhone", false)
-                    putExtra("phoneID", phone.id)
+                    putExtra("phoneID", phone[position].id)
+                    putExtra("loggedUser", userID)
                 }
 
                 context.startActivity(intent)
@@ -43,15 +48,16 @@ class PhoneAdapter(private var phone: Phone, internal var context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewAdapter {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.user_phones_list, parent, false)
 
-        view.phoneModel.text = this.phone.model
-        view.phoneBrand.text = this.phone.brand
-
-        return PhoneViewAdapter(view, this.phone, this.context)
+        return PhoneViewAdapter(view, this.phonesList, this.context, this.userID, this.position)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: PhoneViewAdapter, position: Int) {
+    override fun onBindViewHolder(holder: PhoneViewAdapter, @SuppressLint("RecyclerView") position: Int) {
+        this.position = position
+
+        holder.itemView.phoneModel.text = this.phonesList[position].model
+        holder.itemView.phoneBrand.text = this.phonesList[position].brand
     }
 
-    override fun getItemCount() = 10
+    override fun getItemCount() = phonesList.size
 }

@@ -7,12 +7,19 @@ import android.view.View
 import com.example.davaeth.android_sqliter.R
 import com.example.davaeth.android_sqliter.activities.signing.LoginActivity
 import com.example.davaeth.android_sqliter.activities.signing.RegisterActivity
+import com.example.davaeth.android_sqliter.database.UserHandler
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val dbUsers = UserHandler(this)
+
+        for (user in dbUsers.users) {
+            println(user)
+        }
     }
 
     fun switchToLoginActivity(v: View?) {

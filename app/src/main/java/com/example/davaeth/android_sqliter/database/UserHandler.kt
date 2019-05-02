@@ -9,12 +9,21 @@ import android.util.Log
 import com.example.davaeth.android_sqliter.models.User
 
 class UserHandler(context: Context) :
-    SQLiteOpenHelper(context, UserHandler.DB_NAME, null, UserHandler.dbVersion) {
+    SQLiteOpenHelper(context, DB_NAME, null, dbVersion) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        val CREATE_TABLE =
-            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY,REFERENCE VARCHAR(32), $USERNAME TEXT, $PASSWORD TEXT, $EMAIL VARCHAR(45));"
-        db.execSQL(CREATE_TABLE)
+        val CREATE_USERS_TABLE =
+            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY,REFERENCE TEXT, $USERNAME TEXT, $PASSWORD TEXT, $EMAIL TEXT);"
+
+        val CREATE_PHONES_TABLE =
+            "CREATE TABLE IF NOT EXISTS Phones ($ID INTEGER PRIMARY KEY, REFERENCE TEXT, brand TEXT, model TEXT, system_version FLOAT, website TEXT);"
+
+        val CREATE_USERPHONES_TABLE =
+            "CREATE TABLE IF NOT EXISTS UserPhones (id_users INTEGER, id_phones INTEGER, FOREIGN KEY(id_users) REFERENCES Users(id), FOREIGN KEY(id_phones) REFERENCES Phones(id));"
+
+        db.execSQL(CREATE_USERS_TABLE)
+        db.execSQL(CREATE_PHONES_TABLE)
+        db.execSQL(CREATE_USERPHONES_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -157,7 +166,7 @@ class UserHandler(context: Context) :
     }
 
     companion object {
-        private var dbVersion = 1
+        private var dbVersion = 7
         private const val DB_NAME = "Severian"
         private const val TABLE_NAME = "Users"
         private const val ID = "id"
