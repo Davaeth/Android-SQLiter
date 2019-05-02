@@ -17,26 +17,52 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
     RecyclerView.Adapter<PhoneAdapter.PhoneViewAdapter>() {
 
     private var position: Int = 1
+    private var positionList: MutableList<Int> = mutableListOf()
 
-    class PhoneViewAdapter(view: View, phone: List<Phone>, context: Context, userID: Int, position: Int) : RecyclerView.ViewHolder(view) {
+    class PhoneViewAdapter(
+        view: View,
+        phone: List<Phone>,
+        context: Context,
+        userID: Int,
+        position: Int,
+        positionList: MutableList<Int>
+    ) : RecyclerView.ViewHolder(view) {
 
         init {
             view.setOnClickListener {
-                println(position)
-                val intent: Intent = Intent(context, PhoneActivity::class.java).apply {
-                    putExtra("isNewPhone", false)
-                    putExtra("phoneID", phone[position].id)
-                    putExtra("loggedUser", userID)
+
+                if (positionList.count() == 0) {
+                    val intent: Intent = Intent(context, PhoneActivity::class.java).apply {
+                        putExtra("isNewPhone", false)
+                        putExtra("phoneID", phone[position].id)
+                        putExtra("loggedUser", userID)
+                    }
+
+                    context.startActivity(intent)
+                } else if (positionList.count() > 0) {
+                    if (positionList.toList().contains(position)) {
+                        positionList.remove(position)
+
+                        view.setBackgroundColor(0)
+                    } else {
+                        positionList.add(position)
+
+                        view.setBackgroundColor(Color.LTGRAY)
+                    }
                 }
-
-                context.startActivity(intent)
-
-                view.setBackgroundColor(0)
             }
 
             view.setOnLongClickListener {
 
-                view.setBackgroundColor(Color.LTGRAY)
+                if (!positionList.toList().contains(position)) {
+                    positionList.add(position)
+
+                    view.setBackgroundColor(Color.LTGRAY)
+                } else {
+                    positionList.remove(position)
+
+                    view.setBackgroundColor(0)
+                }
 
                 return@setOnLongClickListener true
             }
@@ -48,7 +74,7 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewAdapter {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.user_phones_list, parent, false)
 
-        return PhoneViewAdapter(view, this.phonesList, this.context, this.userID, this.position)
+        return PhoneViewAdapter(view, this.phonesList, this.context, this.userID, this.position, this.positionList)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -57,7 +83,9 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
 
         holder.itemView.phoneModel.text = this.phonesList[position].model
         holder.itemView.phoneBrand.text = this.phonesList[position].brand
+
+
     }
 
-    override fun getItemCount() = phonesList.size
+    override fun getItemCount() = phonesList.count()
 }
