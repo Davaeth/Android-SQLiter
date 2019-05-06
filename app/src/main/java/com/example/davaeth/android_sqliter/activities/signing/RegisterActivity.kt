@@ -109,7 +109,7 @@ class RegisterActivity : AppCompatActivity() {
     /**
      * Method that checks if username is unique.
      */
-    private fun checkUsername(): Boolean = db.getUser(register_usernameText.text.toString()) != null
+    private fun checkUsername(): Boolean = db.getUser(register_usernameText.text.toString()) != null // Something doesn't work well. To repair.
 
     /**
      * Method that checks if password is validate.

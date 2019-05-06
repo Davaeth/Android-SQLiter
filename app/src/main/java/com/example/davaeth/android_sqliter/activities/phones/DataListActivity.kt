@@ -37,8 +37,6 @@ class DataListActivity : AppCompatActivity() {
 //            println("DataList :: all user phones id: " + phone.id)
 //        }
 
-        setRecyclerView()
-
         setSupportActionBar(findViewById(R.id.dataList_phoneBar))
     }
 
@@ -57,7 +55,8 @@ class DataListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?) = when (item!!.itemId) {
 
         /**
-         * Action that adds new phone to the database.
+         * Action that changes activity to the PhoneActivity
+         * where user can add a new phone.
          */
         R.id.action_add_phone -> {
             val intent: Intent = Intent(this, PhoneActivity::class.java).apply {
@@ -71,7 +70,7 @@ class DataListActivity : AppCompatActivity() {
         }
 
         /**
-         * Action that removes selected phones from the database
+         * Action that removes selected phone(s) from the database.
          */
         R.id.action_remove_phone -> {
             if (GlobalVariables.getSelectedPhones().count() > 0) {
@@ -110,6 +109,10 @@ class DataListActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Method that reloads the recycler view
+     * when some of the phones were deleted.
+     */
     private fun reloadRecycler() {
         val intent: Intent = Intent(this, DataListActivity::class.java).apply {
             putExtra("isNewPhone", true)
@@ -118,17 +121,6 @@ class DataListActivity : AppCompatActivity() {
         }
 
         startActivity(intent)
-    }
-
-    /**
-     *  Print data about selected phone in the template form
-     *  if it's and edit mode, not add.
-     *  Or refresh the recycler view.
-     */
-    private fun setRecyclerView() {
-        initPhonesList()
-
-
     }
 
     /**
