@@ -33,7 +33,7 @@ class RegisterActivity : AppCompatActivity() {
     fun signUp(v: View?) {
 
         // If template was completed properly add user to the database
-        if (checkIsBlank() && checkIsEmail()) {
+        if (checkIsNotBlank() && checkIsEmail() && checkUsername()) {
             user = User(
                 register_usernameText.text.toString(),
                 register_passwordText.text.toString(),
@@ -51,13 +51,42 @@ class RegisterActivity : AppCompatActivity() {
             startActivity(intent)
 
             Toast.makeText(this, "Registered successfully!", Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(this, "Check your data!", Toast.LENGTH_SHORT).show()
         }
 
-        if(!checkIsEmail()) {
+        if (checkIsNotBlank()) {
+            register_usernameText.setBackgroundColor(0)
+            register_emailText.setBackgroundColor(0)
+            register_passwordText.setBackgroundColor(0)
+
+            if (!checkUsername()) {
+                register_usernameText.setBackgroundColor(Color.RED)
+
+                Toast.makeText(this, "This is username is taken!", Toast.LENGTH_LONG).show()
+            } else {
+                register_usernameText.setBackgroundColor(0)
+            }
+
+            if (!checkIsEmail()) {
+                register_emailText.setBackgroundColor(Color.RED)
+
+                Toast.makeText(this, "This is not an email!", Toast.LENGTH_LONG).show()
+            } else {
+                register_emailText.setBackgroundColor(0)
+            }
+
+            if (!checkPassword()) {
+                register_passwordText.setBackgroundColor(Color.RED)
+
+                Toast.makeText(this, "This password is too short!", Toast.LENGTH_LONG).show()
+            } else {
+                register_passwordText.setBackgroundColor(0)
+            }
+        } else {
+            register_usernameText.setBackgroundColor(Color.RED)
             register_emailText.setBackgroundColor(Color.RED)
-            Toast.makeText(this, "This is not an email!", Toast.LENGTH_SHORT).show()
+            register_passwordText.setBackgroundColor(Color.RED)
+
+            Toast.makeText(this, "Fields cannot be blank!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -66,16 +95,24 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     /**
-     * Method that check if template form inputs are blank
+     * Method that check if template form inputs are blank.
      */
-    private fun checkIsBlank(): Boolean {
-        return register_usernameText.text.isNotBlank() && register_passwordText.text.isNotBlank() && register_emailText.text.isNotBlank()
-    }
+    private fun checkIsNotBlank(): Boolean = register_usernameText.text.isNotBlank()
+            && register_passwordText.text.isNotBlank()
+            && register_emailText.text.isNotBlank()
 
     /**
-     * Method that checks if email input contains exactly email
+     * Method that checks if email input contains exactly email.
      */
-    private fun checkIsEmail(): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(register_emailText.text).matches()
-    }
+    private fun checkIsEmail(): Boolean = Patterns.EMAIL_ADDRESS.matcher(register_emailText.text).matches()
+
+    /**
+     * Method that checks if username is unique.
+     */
+    private fun checkUsername(): Boolean = db.getUser(register_usernameText.text.toString()) != null
+
+    /**
+     * Method that checks if password is validate.
+     */
+    private fun checkPassword(): Boolean = register_passwordText.text.length >= 5
 }

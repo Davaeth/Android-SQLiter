@@ -33,9 +33,9 @@ class DataListActivity : AppCompatActivity() {
             println("DataList ::  all phones id: " + phone.id)
         }
 
-        for (phone in dbPhones.getUserPhones(intent.getIntExtra("loggedUser", 1))!!) {
-            println("DataList :: all user phones id: " + phone.id)
-        }
+//        for (phone in dbPhones.getUserPhones(intent.getIntExtra("loggedUser", 1))!!) {
+//            println("DataList :: all user phones id: " + phone.id)
+//        }
 
         setRecyclerView()
 
