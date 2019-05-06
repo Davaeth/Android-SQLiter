@@ -11,19 +11,18 @@ import com.example.davaeth.android_sqliter.models.User
 class UserHandler(context: Context) :
     SQLiteOpenHelper(context, DB_NAME, null, dbVersion) {
 
+    /**
+     * Override method that initializes whole database.
+     */
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_USERS_TABLE =
             "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY,REFERENCE TEXT, $USERNAME TEXT, $PASSWORD TEXT, $EMAIL TEXT);"
 
         val CREATE_PHONES_TABLE =
-            "CREATE TABLE IF NOT EXISTS Phones ($ID INTEGER PRIMARY KEY, REFERENCE TEXT, brand TEXT, model TEXT, system_version FLOAT, website TEXT);"
-
-        val CREATE_USERPHONES_TABLE =
-            "CREATE TABLE IF NOT EXISTS UserPhones (id_users INTEGER, id_phones INTEGER, FOREIGN KEY(id_users) REFERENCES Users(id), FOREIGN KEY(id_phones) REFERENCES Phones(id));"
+            "CREATE TABLE IF NOT EXISTS Phones ($ID INTEGER PRIMARY KEY, REFERENCE TEXT, brand TEXT, model TEXT, system_version FLOAT, website TEXT, user_id INTEGER, FOREIGN KEY (user_id) REFERENCES Users(id));"
 
         db.execSQL(CREATE_USERS_TABLE)
         db.execSQL(CREATE_PHONES_TABLE)
-        db.execSQL(CREATE_USERPHONES_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -137,6 +136,7 @@ class UserHandler(context: Context) :
             }
 
             cursor.close()
+            db.close()
 
             return userList
         }
@@ -160,16 +160,21 @@ class UserHandler(context: Context) :
         val db = this.writableDatabase
         val success = db.delete(TABLE_NAME, ID + "=?", arrayOf(id.toString())).toLong()
 
+        //delete his phones too!
+
         db.close()
 
         return Integer.parseInt("$success") != -1
     }
 
     companion object {
-        private var dbVersion = 7
+        // GENERAL
+        private var dbVersion = 1
         private const val DB_NAME = "Severian"
-        private const val TABLE_NAME = "Users"
         private const val ID = "id"
+
+        // USERS TABLE
+        private const val TABLE_NAME = "Users"
         private const val USERNAME = "username"
         private const val EMAIL = "email"
         private const val PASSWORD = "password"

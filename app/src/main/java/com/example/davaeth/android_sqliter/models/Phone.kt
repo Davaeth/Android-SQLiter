@@ -5,5 +5,6 @@ class Phone(
     var model: String = "",
     var systemVersion: Float = 1.0f,
     var website: String = "",
-    var id: Int = 0
+    var id: Int = 0,
+    var userID: Int = 0
 )

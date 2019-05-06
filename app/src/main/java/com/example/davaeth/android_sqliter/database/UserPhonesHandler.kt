@@ -45,7 +45,7 @@ class UserPhonesHandler(context: Context) :
 
         try {
 
-            val selectQuery = "SELECT * FROM $USERS WHERE $TABLE_NAME.id_phones = '$phone' AND $USERS.id = $TABLE_NAME.id_users"
+            val selectQuery = "SELECT DISTINCT * FROM $USERS WHERE $TABLE_NAME.id_phones = '$phone' AND $USERS.id = $TABLE_NAME.id_users"
 
             val cursor = db.rawQuery(selectQuery, null)
 
@@ -82,7 +82,7 @@ class UserPhonesHandler(context: Context) :
 
         try {
 
-            val selectQuery = "SELECT * FROM $PHONES, $TABLE_NAME WHERE id_users = '$user'"
+            val selectQuery = "SELECT DISTINCT * FROM $PHONES, $TABLE_NAME WHERE id_users = '$user'"
 
             val cursor = db.rawQuery(selectQuery, null)
 
@@ -114,22 +114,9 @@ class UserPhonesHandler(context: Context) :
         return phonesList
     }
 
-//    fun updatePhone(phone: Int): Boolean {
-//        val db = this.writableDatabase
-//        val values = ContentValues()
-//
-//        values.put(ID_PHONES, phone)
-//
-//        val success = db.update(TABLE_NAME, values, ID + "=?", arrayOf(phone.id.toString())).toLong()
-//
-//        db.close()
-//
-//        return Integer.parseInt("$success") != -1
-//    }
-
     fun deletePhone(id: Int): Boolean {
         val db = this.writableDatabase
-        val success = db.delete(TABLE_NAME, ID + "=?", arrayOf(id.toString())).toLong()
+        val success = db.delete(TABLE_NAME, "$ID_PHONES=?", arrayOf(id.toString())).toLong()
 
         db.close()
 

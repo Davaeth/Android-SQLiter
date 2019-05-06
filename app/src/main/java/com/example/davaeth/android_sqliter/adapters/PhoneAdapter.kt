@@ -1,6 +1,5 @@
 package com.example.davaeth.android_sqliter.adapters
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.davaeth.android_sqliter.R
 import com.example.davaeth.android_sqliter.activities.phones.PhoneActivity
+import com.example.davaeth.android_sqliter.global.GlobalVariables
 import com.example.davaeth.android_sqliter.models.Phone
 import kotlinx.android.synthetic.main.user_phones_list.view.*
 
@@ -28,11 +28,18 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
         positionList: MutableList<Int>
     ) : RecyclerView.ViewHolder(view) {
 
+        /**
+         * Init of the ViewAdapter class.
+         * Mostly it stores user touches events.
+         */
         init {
             view.setOnClickListener {
 
+                println("Touch position: $position")
+
                 // Allow phone edit option only when there is no element in multi selection stack
                 if (positionList.count() == 0) {
+                    println("PhoneAdapter :: intent phone id: " + phone[position].id)
                     val intent: Intent = Intent(context, PhoneActivity::class.java).apply {
                         putExtra("isNewPhone", false)
                         putExtra("phoneID", phone[position].id)
@@ -41,12 +48,14 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
 
                     context.startActivity(intent)
                 } else if (positionList.count() > 0) {
-                    if (positionList.toList().contains(position)) {
-                        positionList.remove(position)
+                    if (positionList.toList().contains(phone[position].id)) {
+                        positionList.remove(phone[position].id)
+                        GlobalVariables.removeSelectedPhone(phone[position].id)
 
                         view.setBackgroundColor(0)
                     } else {
-                        positionList.add(position)
+                        positionList.add(phone[position].id)
+                        GlobalVariables.addSelectedPhone(phone[position].id)
 
                         view.setBackgroundColor(Color.LTGRAY)
                     }
@@ -55,14 +64,18 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
 
             view.setOnLongClickListener {
 
+                println("Hold position: $position")
+
                 // Put element at the multi selection stack
                 // and check if this element isn't already at stack
-                if (!positionList.toList().contains(position)) {
-                    positionList.add(position)
+                if (!positionList.toList().contains(phone[position].id)) {
+                    positionList.add(phone[position].id)
+                    GlobalVariables.addSelectedPhone(phone[position].id)
 
                     view.setBackgroundColor(Color.LTGRAY)
                 } else {
-                    positionList.remove(position)
+                    positionList.remove(phone[position].id)
+                    GlobalVariables.removeSelectedPhone(phone[position].id)
 
                     view.setBackgroundColor(0)
                 }
@@ -73,20 +86,31 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
 
     }
 
-    // Create new views (invoked by the layout manager)
+    /**
+     * Method that creates content in the recycler view
+     * and optionally does something with it.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhoneViewAdapter {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.user_phones_list, parent, false)
 
-        return PhoneViewAdapter(view, this.phonesList, this.context, this.userID, this.position, this.positionList)
+        return PhoneViewAdapter(view, this.phonesList, this.context, this.userID, position, this.positionList)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: PhoneViewAdapter, @SuppressLint("RecyclerView") position: Int) {
-        this.position = position
+    /**
+     * Method that does something before anything is even shown,
+     * but after creating.
+     */
+    override fun onBindViewHolder(holder: PhoneViewAdapter, position: Int) {
+        this.position = position + 1
+
+        println("Bind position: $position")
 
         holder.itemView.phoneModel.text = this.phonesList[position].model
         holder.itemView.phoneBrand.text = this.phonesList[position].brand
     }
 
+    /**
+     * Method that specifies how many rows in content will be shown.
+     */
     override fun getItemCount() = phonesList.count()
 }

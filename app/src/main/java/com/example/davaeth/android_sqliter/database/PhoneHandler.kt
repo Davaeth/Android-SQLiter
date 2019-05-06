@@ -12,8 +12,10 @@ class PhoneHandler(context: Context) :
     SQLiteOpenHelper(context, DB_NAME, null, dbVersion) {
 
     override fun onCreate(db: SQLiteDatabase) {
+
+        // Protection from situation when phone table wasn't created in whole db initialize.
         val CREATE_TABLE =
-            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, REFERENCE TEXT, $BRAND TEXT, $MODEL TEXT, $SYSTEM_VERSION FLOAT, $WEBSITE TEXT);"
+            "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($ID INTEGER PRIMARY KEY, REFERENCE TEXT, brand TEXT, model TEXT, system_version FLOAT, website TEXT, user_id INTEGER, FOREIGN KEY (user_id) REFERENCES Users(id));"
         db.execSQL(CREATE_TABLE)
     }
 
@@ -32,6 +34,7 @@ class PhoneHandler(context: Context) :
         values.put(MODEL, phone.model)
         values.put(SYSTEM_VERSION, phone.systemVersion)
         values.put(WEBSITE, phone.website)
+        values.put(OWNER, phone.userID)
 
         val success = db.insert(TABLE_NAME, null, values)
 
@@ -57,6 +60,7 @@ class PhoneHandler(context: Context) :
                     phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
                     phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
                     phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+                    phone.userID = cursor.getInt(cursor.getColumnIndex(OWNER))
                 } while (cursor.moveToNext())
             } else {
                 cursor.close()
@@ -108,6 +112,45 @@ class PhoneHandler(context: Context) :
 //        return phone
 //    }
 
+    fun getUserPhones(user: Int): List<Phone>? {
+        val phonesList = ArrayList<Phone>()
+        val db = this.readableDatabase
+
+        try {
+
+            val selectQuery = "SELECT DISTINCT * FROM $TABLE_NAME WHERE user_id = '$user'"
+
+            val cursor = db.rawQuery(selectQuery, null)
+
+            if (cursor.moveToFirst()) {
+                do {
+                    val phone = Phone()
+
+                    phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                    phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
+                    phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
+                    phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
+                    phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+                    phone.userID = cursor.getInt(cursor.getColumnIndex(OWNER))
+
+                    phonesList.add(phone)
+                } while (cursor.moveToNext())
+            } else {
+                cursor.close()
+                db.close()
+                return null
+            }
+
+            cursor.close()
+        } catch (e: SQLiteException) {
+            Log.w("Exception: ", e)
+        } finally {
+            db.close()
+        }
+
+        return phonesList
+    }
+
     val phones: List<Phone>
         get() {
             val phonesList = ArrayList<Phone>()
@@ -125,12 +168,14 @@ class PhoneHandler(context: Context) :
                     phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
                     phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
                     phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
+                    phone.userID = cursor.getInt(cursor.getColumnIndex(OWNER))
 
                     phonesList.add(phone)
                 }
             }
 
             cursor.close()
+            db.close()
 
             return phonesList
         }
@@ -143,6 +188,7 @@ class PhoneHandler(context: Context) :
         values.put(MODEL, phone.model)
         values.put(SYSTEM_VERSION, phone.systemVersion)
         values.put(WEBSITE, phone.website)
+        values.put(OWNER, phone.userID)
 
         val success = db.update(TABLE_NAME, values, "$ID=?", arrayOf(phone.id.toString())).toLong()
 
@@ -152,8 +198,10 @@ class PhoneHandler(context: Context) :
     }
 
     fun deletePhone(id: Int): Boolean {
-        val db = this.writableDatabase
-        val success = db.delete(TABLE_NAME, "$ID=?", arrayOf(id.toString())).toLong()
+        val db = writableDatabase
+        val success = db.delete(TABLE_NAME, "$ID=?", arrayOf(id.toString()))
+
+        println("kasowanie")
 
         db.close()
 
@@ -161,13 +209,19 @@ class PhoneHandler(context: Context) :
     }
 
     companion object {
-        private var dbVersion = 7
+        // GENERAL
+        private var dbVersion = 1
         private const val DB_NAME = "Severian"
-        private const val TABLE_NAME = "Phones"
         private const val ID = "id"
+
+        // PHONES TABLE
+        private const val TABLE_NAME = "Phones"
         private const val BRAND = "brand"
         private const val MODEL = "model"
         private const val SYSTEM_VERSION = "system_version"
         private const val WEBSITE = "website"
+
+        // FOREIGN KEYs
+        private const val OWNER = "user_id"
     }
 }

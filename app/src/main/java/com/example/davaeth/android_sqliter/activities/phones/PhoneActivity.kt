@@ -9,13 +9,11 @@ import android.view.View
 import android.widget.Toast
 import com.example.davaeth.android_sqliter.R
 import com.example.davaeth.android_sqliter.database.PhoneHandler
-import com.example.davaeth.android_sqliter.database.UserPhonesHandler
 import com.example.davaeth.android_sqliter.models.Phone
 import kotlinx.android.synthetic.main.activity_phone.*
 
 class PhoneActivity : AppCompatActivity() {
 
-    private lateinit var userPhonesDB: UserPhonesHandler
     private lateinit var phonesDB: PhoneHandler
 
     private var phone: Phone? = null
@@ -82,12 +80,10 @@ class PhoneActivity : AppCompatActivity() {
     private fun savePhone() {
         val phone: Phone = getTemplateData()
 
-        userPhonesDB.addUserPhone(intent.getIntExtra("loggedUser", 0), phone.id)
         phonesDB.addPhone(phone)
     }
 
     private fun initDB() {
-        userPhonesDB = UserPhonesHandler(this)
         phonesDB = PhoneHandler(this)
 
         for (phone in phonesDB.phones) {
@@ -96,6 +92,7 @@ class PhoneActivity : AppCompatActivity() {
 
         if (!intent.getBooleanExtra("isNewPhone", true)) {
             if (intent.hasExtra("phoneID")) {
+                println("PhoneActivity :: intent phone id: " + intent.getIntExtra("phoneID", 0))
                 phone = phonesDB.getPhone(intent.getIntExtra("phoneID", 0))
             } else {
                 Toast.makeText(this, "Wrong phone id!", Toast.LENGTH_SHORT).show()
@@ -113,6 +110,7 @@ class PhoneActivity : AppCompatActivity() {
         phone.model = phoneTemplate_model.text.toString()
         phone.systemVersion = phoneTemplate_systemVersion.text.toString().toFloat()
         phone.website = phoneTemplate_website.text.toString()
+        phone.userID = intent.getIntExtra("loggedUser", 0)
 
         return phone
     }
