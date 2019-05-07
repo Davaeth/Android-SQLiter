@@ -15,6 +15,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        /**
+         * Initializing whole database.
+         */
         val dbUsers = UserHandler(this)
 
         for (user in dbUsers.users) {

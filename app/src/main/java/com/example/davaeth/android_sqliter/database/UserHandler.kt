@@ -80,7 +80,7 @@ class UserHandler(context: Context) :
         return user
     }
 
-    fun getUser(username: String): User? {
+    fun getUserByUsername(username: String): User? {
 
         val user = User()
         val db = this.readableDatabase
@@ -88,6 +88,40 @@ class UserHandler(context: Context) :
         try {
 
             val selectQuery = "SELECT * FROM $TABLE_NAME WHERE username = '$username'"
+
+            val cursor = db.rawQuery(selectQuery, null)
+
+            if (cursor.moveToFirst()) {
+                do {
+                    user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
+                    user.username = cursor.getString(cursor.getColumnIndex(USERNAME))
+                    user.password = cursor.getString(cursor.getColumnIndex(PASSWORD))
+                    user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
+                } while (cursor.moveToNext())
+            } else {
+                cursor.close()
+                db.close()
+                return null
+            }
+
+            cursor.close()
+        } catch (e: SQLiteException) {
+            Log.w("Exception: ", e)
+        } finally {
+            db.close()
+        }
+
+        return user
+    }
+
+    fun getUserByEmail(email: String): User? {
+
+        val user = User()
+        val db = this.readableDatabase
+
+        try {
+
+            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE username = '$email'"
 
             val cursor = db.rawQuery(selectQuery, null)
 

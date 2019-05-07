@@ -37,7 +37,9 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
 
                 println("Touch position: $position")
 
-                // Allow phone edit option only when there is no element in multi selection stack
+                /**
+                 * Allow phone edit option only when there is no element in multi selection stack.
+                 */
                 if (positionList.count() == 0) {
 //                    println("PhoneAdapter :: intent phone id: " + phone[position].id)
                     val intent: Intent = Intent(context, PhoneActivity::class.java).apply {
@@ -66,8 +68,10 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
 
 //                println("Hold position: $position")
 
-                // Put element at the multi selection stack
-                // and check if this element isn't already at stack
+                /**
+                 * Put element at the multi selection stack
+                 * and check if this element isn't already at stack.
+                 */
                 if (!positionList.toList().contains(phone[position].id)) {
                     positionList.add(phone[position].id)
                     GlobalVariables.addSelectedPhone(phone[position].id)

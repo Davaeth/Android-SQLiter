@@ -29,10 +29,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signing(v: View?) {
+        /**
+         * Check if fields are not blank.
+         */
         if (checkIsNotBlank()) {
 
             try {
-                this.user = db.getUser(login_usernameText.text.toString())
+                this.user = db.getUserByUsername(login_usernameText.text.toString())
                 println("CORRECT PASSWORD ${this.user!!.password}")
             } catch (e: NullPointerException) {
                 println("Error: $e")

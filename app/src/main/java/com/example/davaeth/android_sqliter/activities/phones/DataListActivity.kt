@@ -54,6 +54,7 @@ class DataListActivity : AppCompatActivity() {
      */
     override fun onOptionsItemSelected(item: MenuItem?) = when (item!!.itemId) {
 
+        //region Actions handling
         /**
          * Action that changes activity to the PhoneActivity
          * where user can add a new phone.
@@ -107,6 +108,7 @@ class DataListActivity : AppCompatActivity() {
         else -> {
             super.onOptionsItemSelected(item)
         }
+        //endregion
     }
 
     /**

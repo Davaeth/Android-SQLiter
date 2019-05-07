@@ -33,7 +33,7 @@ class PhoneActivity : AppCompatActivity() {
     }
 
     /**
-     * Method that searches Internet for a path sent by user
+     * Method that searches Internet for a path sent by user.
      */
     fun searchInternet(view: View) {
         if(phoneTemplate_website.text.startsWith("http://www.") || phoneTemplate_website.text.startsWith("https://www.")) {
@@ -53,7 +53,7 @@ class PhoneActivity : AppCompatActivity() {
     }
 
     /**
-     * Method that saves OR updates the particular phone in database
+     * Method that saves OR updates the particular phone in database.
      */
     fun savePhoneTemplate(view: View) {
         if(intent.getBooleanExtra("isNewPhone", true)) {
@@ -101,7 +101,7 @@ class PhoneActivity : AppCompatActivity() {
     }
 
     /**
-     * Method that receives data posted by user
+     * Method that receives data posted by user.
      */
     private fun getTemplateData(): Phone {
         val phone = Phone()
