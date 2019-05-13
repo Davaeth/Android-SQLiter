@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.user_phones_list.view.*
 class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Context, private var userID: Int) :
     RecyclerView.Adapter<PhoneAdapter.PhoneViewAdapter>() {
 
-    private var position: Int = 1
+    private var position: Int = 0
     private var positionList: MutableList<Int> = mutableListOf()
 
     class PhoneViewAdapter(
@@ -33,6 +33,7 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
          * Mostly it stores user touches events.
          */
         init {
+            //region OnClickListener
             view.setOnClickListener {
 
                 println("Touch position: $position")
@@ -41,7 +42,6 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
                  * Allow phone edit option only when there is no element in multi selection stack.
                  */
                 if (positionList.count() == 0) {
-//                    println("PhoneAdapter :: intent phone id: " + phone[position].id)
                     val intent: Intent = Intent(context, PhoneActivity::class.java).apply {
                         putExtra("isNewPhone", false)
                         putExtra("phoneID", phone[position].id)
@@ -63,10 +63,10 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
                     }
                 }
             }
+            //endregion
 
+            //region OnHoldListener
             view.setOnLongClickListener {
-
-//                println("Hold position: $position")
 
                 /**
                  * Put element at the multi selection stack
@@ -86,8 +86,8 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
 
                 return@setOnLongClickListener true
             }
+            //endregion
         }
-
     }
 
     /**
@@ -106,6 +106,8 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
      */
     override fun onBindViewHolder(holder: PhoneViewAdapter, position: Int) {
         this.position = position + 1
+
+        println("this position: ${this.position}")
 
         println("Bind position: $position")
 

@@ -9,7 +9,7 @@
 
     <TextView
             android:text="Create your account"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/signText" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
@@ -17,7 +17,7 @@
             android:textSize="42sp" android:textStyle="italic"
             android:fontFamily="sans-serif-black" android:textColor="@color/register_sign_text"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.08"/>
+            app:layout_constraintVertical_bias="0.1" app:layout_constraintHorizontal_bias="0.0"/>
     <Button
             android:onClick="signUp"
             android:text="@string/register"
@@ -44,7 +44,7 @@
             app:layout_constraintHorizontal_bias="0.0" android:layout_marginBottom="120dp"
             app:layout_constraintBottom_toBottomOf="@+id/register_sendDataBtn"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.972"/>
+            app:layout_constraintVertical_bias="0.9"/>
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/register_sendDataBtn"
-            app:layout_constraintVertical_bias="0.561" app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintVertical_bias="0.55" app:layout_constraintTop_toTopOf="parent"/>
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -67,6 +67,6 @@
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
             android:hint="Username"
             app:layout_constraintHorizontal_bias="0.0" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.313"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.35"
             app:layout_constraintTop_toTopOf="parent"/>
 </android.support.constraint.ConstraintLayout>

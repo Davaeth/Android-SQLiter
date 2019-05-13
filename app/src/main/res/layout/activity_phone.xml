@@ -55,35 +55,38 @@
     <Button
             android:text="WWW"
             android:onClick="searchInternet"
-            android:layout_width="114dp"
-            android:layout_height="70dp"
+            android:layout_width="132dp"
+            android:layout_height="78dp"
             android:id="@+id/phoneTemplate_websiteBtn" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             app:layout_constraintHorizontal_bias="0.028" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.807"
-            android:textSize="18sp"/>
+            android:textSize="30sp" android:background="@drawable/button_shape"
+            android:textColor="@android:color/white"/>
     <Button
             android:text="@android:string/cancel"
             android:onClick="cancelPhoneTemplate"
-            android:layout_width="114sp"
-            android:layout_height="70sp"
+            android:layout_width="134dp"
+            android:layout_height="77dp"
             android:id="@+id/phoneTemplate_cancelBtn" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintVertical_bias="0.987" android:textSize="18sp"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.421"
+            app:layout_constraintVertical_bias="0.987" android:textSize="25sp"
+            android:background="@drawable/button_cancel_shape" android:textColor="@android:color/black"/>
     <Button
             android:text="Save"
             android:onClick="savePhoneTemplate"
-            android:layout_width="114sp"
-            android:layout_height="70sp"
+            android:layout_width="146dp"
+            android:layout_height="94dp"
             android:id="@+id/phoneTemplate_saveBtn" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.971"
-            app:layout_constraintVertical_bias="0.857" android:textSize="18sp"/>
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.968"
+            app:layout_constraintVertical_bias="0.842" android:textSize="34sp"
+            android:background="@drawable/button_save_shape" android:textColor="@android:color/black"/>
 </android.support.constraint.ConstraintLayout>

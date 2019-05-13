@@ -18,6 +18,7 @@ class PhoneActivity : AppCompatActivity() {
 
     private var phone: Phone? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone)
@@ -36,15 +37,20 @@ class PhoneActivity : AppCompatActivity() {
      * Method that searches Internet for a path sent by user.
      */
     fun searchInternet(view: View) {
-        if(phoneTemplate_website.text.startsWith("http://www.") || phoneTemplate_website.text.startsWith("https://www.")) {
-            val uriURL: Uri = Uri.parse("${phoneTemplate_website.text}")
+        if (phoneTemplate_website.text.isNotBlank()) {
+            if (phoneTemplate_website.text.startsWith("http://www.") || phoneTemplate_website.text.startsWith("https://www.")) {
+                val uriURL: Uri = Uri.parse("${phoneTemplate_website.text}")
 
-            val searchInWeb = Intent(Intent.ACTION_VIEW, uriURL)
+                val searchInWeb = Intent(Intent.ACTION_VIEW, uriURL)
 
-            startActivity(searchInWeb)
+                startActivity(searchInWeb)
+            } else {
+                Toast.makeText(this, "Address should start with https://www.", Toast.LENGTH_LONG).show()
+                phoneTemplate_website.setBackgroundColor(Color.RED)
+            }
         } else {
-            Toast.makeText(this, "Wrong address!", Toast.LENGTH_LONG).show()
-            view.setBackgroundColor(Color.RED)
+            Toast.makeText(this, "Website field cannot be blank!", Toast.LENGTH_LONG).show()
+            phoneTemplate_website.setBackgroundColor(Color.RED)
         }
     }
 
@@ -56,43 +62,49 @@ class PhoneActivity : AppCompatActivity() {
      * Method that saves OR updates the particular phone in database.
      */
     fun savePhoneTemplate(view: View) {
-        if(intent.getBooleanExtra("isNewPhone", true)) {
-            savePhone()
+        if (getTemplateData() != null) {
+            if (intent.getBooleanExtra("isNewPhone", true)) {
+                savePhone()
 
-            Toast.makeText(this, "Phone added successfully!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Phone added successfully!", Toast.LENGTH_LONG).show()
 
-            backToPhonesList()
-        } else {
-            updatePhone()
+                backToPhonesList()
+            } else {
+                if (phoneTemplate_website.text.startsWith("http://www.") || phoneTemplate_website.text.startsWith("https://www.")) {
+                    updatePhone()
 
-            Toast.makeText(this, "Phone updated successfully!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Phone updated successfully!", Toast.LENGTH_LONG).show()
 
-            backToPhonesList()
+                    backToPhonesList()
+                } else {
+                    Toast.makeText(this, "Address should start with https://www.", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 
     private fun updatePhone() {
-        val phone: Phone = getTemplateData()
+        if (getTemplateData() != null) {
+            val phone: Phone = getTemplateData()!!
+            phone.id = intent.getIntExtra("phoneID", 0)
 
-        phonesDB.updatePhone(phone)
+            phonesDB.updatePhone(phone)
+        }
     }
 
     private fun savePhone() {
-        val phone: Phone = getTemplateData()
+        if (getTemplateData() != null) {
+            val phone: Phone = getTemplateData()!!
 
-        phonesDB.addPhone(phone)
+            phonesDB.addPhone(phone)
+        }
     }
 
     private fun initDB() {
         phonesDB = PhoneHandler(this)
 
-        for (phone in phonesDB.phones) {
-            println(phone)
-        }
-
         if (!intent.getBooleanExtra("isNewPhone", true)) {
             if (intent.hasExtra("phoneID")) {
-                println("PhoneActivity :: intent phone id: " + intent.getIntExtra("phoneID", 0))
                 phone = phonesDB.getPhone(intent.getIntExtra("phoneID", 0))
             } else {
                 Toast.makeText(this, "Wrong phone id!", Toast.LENGTH_SHORT).show()
@@ -103,16 +115,33 @@ class PhoneActivity : AppCompatActivity() {
     /**
      * Method that receives data posted by user.
      */
-    private fun getTemplateData(): Phone {
+    private fun getTemplateData(): Phone? {
         val phone = Phone()
 
-        phone.brand = phoneTemplate_brand.text.toString()
-        phone.model = phoneTemplate_model.text.toString()
-        phone.systemVersion = phoneTemplate_systemVersion.text.toString().toFloat()
-        phone.website = phoneTemplate_website.text.toString()
-        phone.userID = intent.getIntExtra("loggedUser", 0)
+        if (checkIsNotBlank()) {
 
-        return phone
+            phoneTemplate_brand.setBackgroundColor(0)
+            phoneTemplate_model.setBackgroundColor(0)
+            phoneTemplate_systemVersion.setBackgroundColor(0)
+            phoneTemplate_website.setBackgroundColor(0)
+
+            phone.brand = phoneTemplate_brand.text.toString()
+            phone.model = phoneTemplate_model.text.toString()
+            phone.systemVersion = phoneTemplate_systemVersion.text.toString().toFloat()
+            phone.website = phoneTemplate_website.text.toString()
+            phone.userID = intent.getIntExtra("loggedUser", 0)
+
+            return phone
+        } else {
+            Toast.makeText(this, "Fields cannot be blank!", Toast.LENGTH_LONG).show()
+
+            phoneTemplate_brand.setBackgroundColor(Color.RED)
+            phoneTemplate_model.setBackgroundColor(Color.RED)
+            phoneTemplate_systemVersion.setBackgroundColor(Color.RED)
+            phoneTemplate_website.setBackgroundColor(Color.RED)
+
+            return null
+        }
     }
 
     private fun backToPhonesList() {
@@ -122,5 +151,14 @@ class PhoneActivity : AppCompatActivity() {
 
         startActivity(intent)
     }
+
+    /**
+     * Method that check if template form inputs are blank.
+     */
+    private fun checkIsNotBlank(): Boolean =
+        phoneTemplate_brand.text.isNotBlank()
+                && phoneTemplate_model.text.isNotBlank()
+                && phoneTemplate_systemVersion.text.isNotBlank()
+                && phoneTemplate_website.text.isNotBlank()
 
 }

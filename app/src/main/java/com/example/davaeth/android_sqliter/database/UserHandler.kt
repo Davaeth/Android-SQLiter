@@ -121,7 +121,7 @@ class UserHandler(context: Context) :
 
         try {
 
-            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE username = '$email'"
+            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE email = '$email'"
 
             val cursor = db.rawQuery(selectQuery, null)
 
@@ -155,9 +155,8 @@ class UserHandler(context: Context) :
             val selectQuery = "SELECT  * FROM Users"
             val cursor = db.rawQuery(selectQuery, null)
 
-            if (cursor != null) {
-                cursor.moveToFirst()
-                while (cursor.moveToNext()) {
+            if (cursor.moveToFirst()) {
+                do {
                     val user = User()
 
                     user.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
@@ -166,7 +165,7 @@ class UserHandler(context: Context) :
                     user.email = cursor.getString(cursor.getColumnIndex(EMAIL))
 
                     userList.add(user)
-                }
+                } while (cursor.moveToNext())
             }
 
             cursor.close()
