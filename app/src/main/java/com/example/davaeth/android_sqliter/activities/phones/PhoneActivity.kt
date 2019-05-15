@@ -58,26 +58,36 @@ class PhoneActivity : AppCompatActivity() {
         backToPhonesList()
     }
 
+    //region Save/Update phone
+
     /**
      * Method that saves OR updates the particular phone in database.
      */
     fun savePhoneTemplate(view: View) {
         if (getTemplateData() != null) {
             if (intent.getBooleanExtra("isNewPhone", true)) {
-                savePhone()
+                if (phoneTemplate_website.text.startsWith("http://www.") || phoneTemplate_website.text.startsWith("https://www.")) {
+                    savePhone()
 
-                Toast.makeText(this, "Phone added successfully!", Toast.LENGTH_LONG).show()
+                    phoneTemplate_website.setBackgroundColor(0)
+                    Toast.makeText(this, "Phone added successfully!", Toast.LENGTH_LONG).show()
 
-                backToPhonesList()
+                    backToPhonesList()
+                } else {
+                    Toast.makeText(this, "Address should start with https://www.", Toast.LENGTH_LONG).show()
+                    phoneTemplate_website.setBackgroundColor(Color.RED)
+                }
             } else {
                 if (phoneTemplate_website.text.startsWith("http://www.") || phoneTemplate_website.text.startsWith("https://www.")) {
                     updatePhone()
 
+                    phoneTemplate_website.setBackgroundColor(0)
                     Toast.makeText(this, "Phone updated successfully!", Toast.LENGTH_LONG).show()
 
                     backToPhonesList()
                 } else {
                     Toast.makeText(this, "Address should start with https://www.", Toast.LENGTH_LONG).show()
+                    phoneTemplate_website.setBackgroundColor(Color.RED)
                 }
             }
         }
@@ -99,6 +109,8 @@ class PhoneActivity : AppCompatActivity() {
             phonesDB.addPhone(phone)
         }
     }
+
+    //endregion
 
     private fun initDB() {
         phonesDB = PhoneHandler(this)
