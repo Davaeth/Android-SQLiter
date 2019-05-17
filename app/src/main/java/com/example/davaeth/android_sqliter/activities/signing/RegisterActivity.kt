@@ -27,11 +27,6 @@ class RegisterActivity : AppCompatActivity() {
 
         initDB()
 
-        for (user in db.users) {
-            println(user.username)
-            println(user.email)
-        }
-
         register_usernameText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
     }
 

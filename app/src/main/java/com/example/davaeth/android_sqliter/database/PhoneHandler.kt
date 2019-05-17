@@ -77,40 +77,6 @@ class PhoneHandler(context: Context) :
 
         return phone
     }
-//
-//    fun getPhone(brand: String): Phone? {
-//        val phone = Phone()
-//        val db = this.readableDatabase
-//
-//        try {
-//
-//            val selectQuery = "SELECT * FROM $TABLE_NAME WHERE brand = '$brand'"
-//
-//            val cursor = db.rawQuery(selectQuery, null)
-//
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    phone.id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(ID)))
-//                    phone.brand = cursor.getString(cursor.getColumnIndex(BRAND))
-//                    phone.model = cursor.getString(cursor.getColumnIndex(MODEL))
-//                    phone.systemVersion = cursor.getFloat(cursor.getColumnIndex(SYSTEM_VERSION))
-//                    phone.website = cursor.getString(cursor.getColumnIndex(WEBSITE))
-//                } while (cursor.moveToNext())
-//            } else {
-//                cursor.close()
-//                db.close()
-//                return null
-//            }
-//
-//            cursor.close()
-//        } catch (e: SQLiteException) {
-//            Log.w("Exception: ", e)
-//        } finally {
-//            db.close()
-//        }
-//
-//        return phone
-//    }
 
     fun getUserPhones(user: Int): List<Phone>? {
         val phonesList = ArrayList<Phone>()
@@ -200,8 +166,6 @@ class PhoneHandler(context: Context) :
     fun deletePhone(id: Int): Boolean {
         val db = writableDatabase
         val success = db.delete(TABLE_NAME, "$ID=?", arrayOf(id.toString()))
-
-        println("kasowanie")
 
         db.close()
 

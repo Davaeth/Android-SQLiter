@@ -29,14 +29,6 @@ class DataListActivity : AppCompatActivity() {
 
         initPhonesList()
 
-        for (phone in dbPhones.phones) {
-            println("DataList ::  all phones id: " + phone.id)
-        }
-
-//        for (phone in dbPhones.getUserPhones(intent.getIntExtra("loggedUser", 1))!!) {
-//            println("DataList :: all user phones id: " + phone.id)
-//        }
-
         setSupportActionBar(findViewById(R.id.dataList_phoneBar))
     }
 

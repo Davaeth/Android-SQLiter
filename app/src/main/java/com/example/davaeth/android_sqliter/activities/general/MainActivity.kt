@@ -19,10 +19,6 @@ class MainActivity : AppCompatActivity() {
          * Initializing whole database.
          */
         val dbUsers = UserHandler(this)
-
-        for (user in dbUsers.users) {
-            println(user)
-        }
     }
 
     fun switchToLoginActivity(v: View?) {

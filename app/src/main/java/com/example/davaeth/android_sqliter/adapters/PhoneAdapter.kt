@@ -36,8 +36,6 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
             //region OnClickListener
             view.setOnClickListener {
 
-                println("Touch position: $position")
-
                 /**
                  * Allow phone edit option only when there is no element in multi selection stack.
                  */
@@ -106,10 +104,6 @@ class PhoneAdapter(private var phonesList: List<Phone>, internal var context: Co
      */
     override fun onBindViewHolder(holder: PhoneViewAdapter, position: Int) {
         this.position = position + 1
-
-        println("this position: ${this.position}")
-
-        println("Bind position: $position")
 
         holder.itemView.phoneModel.text = this.phonesList[position].model
         holder.itemView.phoneBrand.text = this.phonesList[position].brand
